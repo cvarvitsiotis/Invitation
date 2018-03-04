@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessageList renders correctly 1`] = `"<div class=\\"card\\"><div class=\\"card-header\\"><div class=\\"d-flex align-items-center justify-content-between\\"><div>Messages</div><a class=\\"btn btn-outline-primary btn-sm\\" href=\\"null/addMessage\\">Add</a></div></div><div class=\\"list-group list-group-flush\\"><div class=\\"list-group-item d-flex justify-content-between\\"><div>Hey all. Betty is having a wedding.</div><div>Fri Jan 05 2018</div></div><div class=\\"list-group-item d-flex justify-content-between\\"><div>Don't forget about Betty's wedding.</div><div>Mon Jan 22 2018</div></div></div></div>"`;

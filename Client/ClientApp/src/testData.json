@@ -1,0 +1,112 @@
+{
+  "data": {
+    "events": [
+      {
+        "id": "1",
+        "description": "Betty's wedding",
+        "date": "3/4/18",
+        "messages": [
+          {
+            "id": "1",
+            "content": "Hey all. Betty is having a wedding.",
+            "date": "1/5/18"
+          },
+          {
+            "id": "2",
+            "content": "Don't forget about Betty's wedding.",
+            "date": "1/22/18"
+          }
+        ],
+        "personStatuses": [
+          {
+            "id": "1",
+            "personId": "1",
+            "status": "yes"
+          },
+          {
+            "id": "2",
+            "personId": "2",
+            "status": "no response"
+          },
+          {
+            "id": "3",
+            "personId": "3",
+            "status": "maybe"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "description": "Lenny's birthday party",
+        "date": "4/18/18",
+        "messages": [
+          {
+            "id": "3",
+            "content": "Come to Lenny's 21st birthday party.",
+            "date": "2/9/18"
+          },
+          {
+            "id": "4",
+            "content": "We have moved locations of Lenny's party.",
+            "date": "2/28/18"
+          }
+        ],
+        "personStatuses": [
+          {
+            "id": "4",
+            "personId": "4",
+            "status": "yes"
+          },
+          {
+            "id": "5",
+            "personId": "5",
+            "status": "no"
+          },
+          {
+            "id": "6",
+            "personId": "6",
+            "status": "not prompted"
+          }
+        ]
+      }
+    ],
+    "people": [
+      {
+        "id": "1",
+        "firstName": "Bob",
+        "lastName": "Pendergast",
+        "phone": "1111111111"
+      },
+      {
+        "id": "2",
+        "firstName": "Sue",
+        "lastName": "Finklestein",
+        "phone": "2222222222"
+      },
+      {
+        "id": "3",
+        "firstName": "Jim",
+        "lastName": "Forrestor",
+        "phone": "3333333333"
+      },
+      {
+        "id": "4",
+        "firstName": "Craig",
+        "lastName": "Pattington",
+        "phone": "4444444444"
+      },
+      {
+        "id": "5",
+        "firstName": "Olly",
+        "lastName": "Fowler",
+        "phone": "5555555555"
+      },
+      {
+        "id": "6",
+        "firstName": "Phil",
+        "lastName": "Pumpernickel",
+        "phone": "6666666666"
+      }
+    ]
+  }
+}
