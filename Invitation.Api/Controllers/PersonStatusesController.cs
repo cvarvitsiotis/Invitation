@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Invitation.Api.Controllers
 {
-    [Route("api/events/{eventId}/[controller]")]
+    [Route("api/events/{eventId}/personStatuses")]
     [ApiController]
     public class PersonStatusesController : Controller
     {
@@ -19,7 +19,7 @@ namespace Invitation.Api.Controllers
             _everythingService.CreateEverythingIfIncomplete();
         }
 
-        [HttpGet(Name = "GetPersonStatus")]
+        [HttpGet("{id}", Name = "GetPersonStatus")]
         public IActionResult GetPersonStatus(string id)
         {
             PersonStatus personStatus = _eventService.GetPersonStatus(id);

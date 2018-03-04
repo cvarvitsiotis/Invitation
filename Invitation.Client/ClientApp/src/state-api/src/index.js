@@ -45,31 +45,24 @@ class StateApi {
     return allPeople.filter(a => currentPeople.findIndex(c => c.personId === a.id) === -1);
   };
 
-  post = (action, data) => {
-    const url = `http://localhost:5000/api/${action}`;    
+  postAndGetFreshEventAndMerge = (action, data, eventId) => {
+    const url = `https://localhost:44381/api/${action}`;
     axios.post(url, data)
+      .then(() => {
+        return axios.get(`https://localhost:44381/api/events/${eventId}`);
+      })
       .then(resp => {
-        return resp.data;
+        this.mapEventPropsIntoObjectsAndMerge(resp.data);
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  getFreshEvent = eventId => {
-    axios.get(`http://localhost:5000/api/events/${eventId}`)
-      .then(resp => {
-        return resp.data;      
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  mapEventPropsIntoObjects = event => {
+  mapEventPropsIntoObjectsAndMerge = event => {
     event.messages = this.mapIntoObject(event.messages);
     event.personStatuses = this.mapIntoObject(event.personStatuses);
-    return event;
+    this.mergeEvents(event);
   };
 
   mergeEvents = event => {
@@ -89,25 +82,28 @@ class StateApi {
 
   addEvent = (description, date) => {
     const addEvent = { description, date: date.toJSON() };
-    var event = this.post('event', addEvent);
-    event = this.mapEventPropsIntoObjects(event);
-    this.mergeEvents(event);
+    const action = 'events';
+    const data = addEvent;
+    const url = `https://localhost:44381/api/${action}`;    
+    axios.post(url, data)
+      .then(resp => {
+        this.mapEventPropsIntoObjectsAndMerge(resp.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   addMessage = (eventId, content, date) => {
     const addMessage = { content, date: date.toJSON() };
-    this.post(`event/${eventId}/messages`, addMessage);
-    var event = this.getFreshEvent(eventId);
-    event = this.mapEventPropsIntoObjects(event);
-    this.mergeEvents(event);
+    const action = `events/${eventId}/messages`;
+    this.postAndGetFreshEventAndMerge(action, addMessage, eventId);
   };
 
   addPerson = (eventId, personId, status) => {
     const addPersonStatus = { personId, status };
-    this.post(`event/${eventId}/personStatuses`, addPersonStatus);
-    var event = this.getFreshEvent(eventId);
-    event = this.mapEventPropsIntoObjects(event);
-    this.mergeEvents(event);
+    const action = `events/${eventId}/personStatuses`;
+    this.postAndGetFreshEventAndMerge(action, addPersonStatus, eventId);
   };
 
   subscribe = callback => {

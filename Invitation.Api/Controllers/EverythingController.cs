@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Invitation.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/everything")]
     [ApiController]
     public class EverythingController : Controller
     {
