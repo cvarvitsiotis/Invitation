@@ -3,7 +3,10 @@ import axios from 'axios';
 class StateApi {
   
   constructor(rawData) {
-    this.data = this.convertRawData(rawData);
+    this.data = {
+      ...this.convertRawData(rawData),
+      isAuthenticated: true
+    };
     this.subscriptions = {};
     this.lastSubscriptionId = 0;
   }
@@ -104,6 +107,11 @@ class StateApi {
     const addPersonStatus = { personId, status };
     const action = `events/${eventId}/personStatuses`;
     this.postAndGetFreshEventAndMerge(action, addPersonStatus, eventId);
+  };
+
+  logout = () => {
+    this.data.isAuthenticated = false;
+    this.notifySubscribers();
   };
 
   subscribe = callback => {

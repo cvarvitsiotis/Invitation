@@ -12,7 +12,7 @@ class AddPersonListItem extends React.PureComponent {
     const { person, onClick } = this.props;
     return (
       <Route render={({ match, history }) => (
-        <Link to="" href="" className="list-group-item list-group-item-action" onClick={() => onClick(person.id, match.params.id, history)}>
+        <Link to="#" className="list-group-item list-group-item-action" onClick={() => onClick(person.id, match.params.id, history)}>
           <div className="d-flex justify-content-between">
             <div>{person.firstName} {person.lastName}</div>
             <div>{formatPhone(person.phone)}</div>
