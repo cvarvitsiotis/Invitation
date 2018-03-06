@@ -1,0 +1,1 @@
+powershell "& .\RunProjectsAndWebpack.ps1"
