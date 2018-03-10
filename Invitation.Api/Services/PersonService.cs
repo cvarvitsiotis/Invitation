@@ -1,7 +1,9 @@
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
 {
@@ -19,14 +21,14 @@ namespace Invitation.Api.Services
             return _apiContext.People.Any();
         }
 
-        public List<Person> GetPeople()
+        public async Task<List<Person>> GetPeopleByUserId(string userId)
         {
-            return _apiContext.People.ToList();
+            return await _apiContext.People.Where(p => p.UserId == userId).ToListAsync();
         }
 
-        public Person GetPerson(string id)
+        public async Task<Person> GetPerson(string id)
         {
-            return GetPeople().FirstOrDefault(p => p.Id == id);
+            return (await GetPeopleByUserId(null)).FirstOrDefault(p => p.Id == id);
         }
     }
 }

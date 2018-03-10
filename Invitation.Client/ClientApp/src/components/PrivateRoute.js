@@ -4,10 +4,10 @@ import { Route, Redirect } from 'react-router-dom';
 
 class PrivateRoute extends React.PureComponent {
   render() {
-    const { component: Component, isAuthenticated, ...rest } = this.props;
+    const { component: Component, userId, ...rest } = this.props;
     return (
       <Route {...rest} render={props =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to='/login' />
+        userId ? <Component {...props} /> : <Redirect to='/' />
       }/>
     );
   }
@@ -15,7 +15,7 @@ class PrivateRoute extends React.PureComponent {
 
 function extraProps(props, store) {
   return {
-    isAuthenticated: store.getState().isAuthenticated
+    userId: store.getState().userId
   };
 }
 

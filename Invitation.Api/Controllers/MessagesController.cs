@@ -9,20 +9,20 @@ namespace Invitation.Api.Controllers
     public class MessagesController : Controller
     {
         private readonly IEverythingService _everythingService;
-        private readonly IEventService _eventService;
+        private readonly IMessageService _messageService;
 
-        public MessagesController(IEverythingService everythingService, IEventService eventService)
+        public MessagesController(IEverythingService everythingService, IMessageService messageService)
         {
             _everythingService = everythingService;
-            _eventService = eventService;
+            _messageService = messageService;
 
             _everythingService.CreateEverythingIfIncomplete();
         }
 
         [HttpGet("{id}", Name = "GetMessage")]
-        public IActionResult GetMessage(string id)
+        public IActionResult GetMessage(string eventId, string id)
         {
-            Message message = _eventService.GetMessage(id);
+            Message message = _messageService.GetMessage(eventId, id);
 
             if (message == null) return NotFound();
 
@@ -34,7 +34,7 @@ namespace Invitation.Api.Controllers
         {
             if (addMessage == null) return BadRequest();
 
-            Message message = _eventService.AddMessage(eventId, addMessage);
+            Message message = _messageService.AddMessage(eventId, addMessage);
 
             if (message == null) return BadRequest();
 

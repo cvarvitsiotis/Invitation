@@ -22,12 +22,15 @@ namespace Invitation.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-
+            services.AddHttpClient();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase("Api"));
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEverythingService, EverythingService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IPersonStatusService, PersonStatusService>();
             services.AddScoped<IPersonService, PersonService>();
         }
 

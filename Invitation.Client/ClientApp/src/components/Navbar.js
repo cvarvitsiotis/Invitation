@@ -1,26 +1,31 @@
 import React from 'react';
 import storeProvider from './storeProvider';
-import { Link, NavLink } from 'react-router-dom';
+import { Route, Link, NavLink } from 'react-router-dom';
 
 class Navbar extends React.PureComponent {
-  logout = () => {
-    this.props.logout(event, this.state.description, this.state.date);
-  }
-
   render() {
-    const { isAuthenticated, logout } = this.props;
+    const { userId, userPicture, signOut } = this.props;
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <Link to="/" className="navbar-brand">
-          <img src="/logo.png" width="40" height="40" alt="" />
+          <img src="/logo.png" width="40" height="40" alt="Invitation Logo" />
         </Link>
         <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
           <div className="navbar-nav">
             <NavLink to="/events" className="nav-item nav-link" activeClassName="active">Events</NavLink>
             <NavLink to="/people" className="nav-item nav-link" activeClassName="active">People</NavLink>
           </div>
-          <div className="navbar-nav">
-            <Link to="#" hidden={isAuthenticated === false} className="nav-item nav-link" onClick={logout}>Log out</Link>
+          <div>
+            {userId &&
+              <Route render={() => (
+                <div className="navbar-nav d-inline-block">
+                  <Link to="#" className="nav-item nav-link" onClick={signOut}>Log out</Link>
+                </div>
+              )}/>
+            }
+            {userPicture &&
+              <img src={userPicture} width="40" height="40" className="rounded d-inline-block align-top" alt="User Picture" />
+            }
           </div>
         </div>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +38,10 @@ class Navbar extends React.PureComponent {
 
 function extraProps(props, store) {
   return {
-    isAuthenticated: store.getState().isAuthenticated,
-    logout: () => {
-      store.logout();
+    userId: store.getState().userId,
+    userPicture: store.getState().userPicture,
+    signOut: () => {
+      store.signOut();
       return false;
     }
   };

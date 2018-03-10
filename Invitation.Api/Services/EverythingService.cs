@@ -1,5 +1,6 @@
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
+using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
 {
@@ -16,14 +17,14 @@ namespace Invitation.Api.Services
             _personService = personService;
         }
 
-        public Everything GetEverything()
+        public async Task<Everything> GetEverything(string userId)
         {
             CreateEverythingIfIncomplete();
 
             return new Everything
             {
-                Events = _eventService.GetEvents(),
-                People = _personService.GetPeople()
+                Events = await _eventService.GetEventsByUserId(userId),
+                People = await _personService.GetPeopleByUserId(userId)
             };
         }
 

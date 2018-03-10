@@ -9,20 +9,20 @@ namespace Invitation.Api.Controllers
     public class PersonStatusesController : Controller
     {
         private readonly IEverythingService _everythingService;
-        private readonly IEventService _eventService;
+        private readonly IPersonStatusService _personStatusService;
 
-        public PersonStatusesController(IEverythingService everythingService, IEventService eventService)
+        public PersonStatusesController(IEverythingService everythingService, IPersonStatusService personStatusService)
         {
             _everythingService = everythingService;
-            _eventService = eventService;
+            _personStatusService = personStatusService;
 
             _everythingService.CreateEverythingIfIncomplete();
         }
 
         [HttpGet("{id}", Name = "GetPersonStatus")]
-        public IActionResult GetPersonStatus(string id)
+        public IActionResult GetPersonStatus(string eventId, string id)
         {
-            PersonStatus personStatus = _eventService.GetPersonStatus(id);
+            PersonStatus personStatus = _personStatusService.GetPersonStatus(eventId, id);
 
             if (personStatus == null) return NotFound();
 
@@ -34,7 +34,7 @@ namespace Invitation.Api.Controllers
         {
             if (addPersonStatus == null) return BadRequest();
 
-            PersonStatus personStatus = _eventService.AddPersonStatus(eventId, addPersonStatus);
+            PersonStatus personStatus = _personStatusService.AddPersonStatus(eventId, addPersonStatus);
 
             if (personStatus == null) return BadRequest();
 

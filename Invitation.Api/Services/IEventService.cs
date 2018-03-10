@@ -1,5 +1,6 @@
 using Invitation.Api.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
 {
@@ -7,18 +8,10 @@ namespace Invitation.Api.Services
     {
         bool Any();
         
-        List<Event> GetEvents();
-
         Event GetEvent(string id);
 
-        Message GetMessage(string id);
-
-        PersonStatus GetPersonStatus(string id);
+        Task<List<Event>> GetEventsByUserId(string userId);
 
         Event CreateEvent(AddEvent addEvent);
-
-        Message AddMessage(string eventId, AddMessage addMessage);
-
-        PersonStatus AddPersonStatus(string eventId, AddPersonStatus addPersonStatus);
     }
 }

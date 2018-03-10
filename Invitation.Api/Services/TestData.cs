@@ -6,20 +6,22 @@ namespace Invitation.Api.Services
 {
     public class TestData
     {
+        private const string userId = "112813386652595603642";
+
         public List<Event> GetEvents() => new List<Event>
         {
-            new Event { Id = "1", Description = "Betty's wedding", Date = new DateTime(2018, 3, 4), Messages = GetMessagesForEvent1(), PersonStatuses = GetPersonStatusesForEvent1() },
-            new Event { Id = "2", Description = "Lenny's birthday party", Date = new DateTime(2018, 4, 18), Messages = GetMessagesForEvent2(), PersonStatuses = GetPersonStatusesForEvent2() }
+            new Event { Id = "1", UserId = userId, Description = "Betty's wedding", Date = new DateTime(2018, 3, 4), Messages = GetMessagesForEvent1(), PersonStatuses = GetPersonStatusesForEvent1() },
+            new Event { Id = "2", UserId = userId, Description = "Lenny's birthday party", Date = new DateTime(2018, 4, 18), Messages = GetMessagesForEvent2(), PersonStatuses = GetPersonStatusesForEvent2() }
         };
 
         public List<Person> GetPeople() => new List<Person>
         {
-            new Person { Id = "1", FirstName = "Bob", LastName = "Pendergast", Phone = "1111111111" },
-            new Person { Id = "2", FirstName = "Sue", LastName = "Finklestein", Phone = "2222222222" },
-            new Person { Id = "3", FirstName = "Jim", LastName = "Forrestor", Phone = "3333333333" },
-            new Person { Id = "4", FirstName = "Craig", LastName = "Pattington", Phone = "4444444444" },
-            new Person { Id = "5", FirstName = "Olly", LastName = "Fowler", Phone = "5555555555" },
-            new Person { Id = "6", FirstName = "Phil", LastName = "Pumpernickel", Phone = "6666666666" }
+            new Person { Id = "1", UserId = userId, FirstName = "Bob", LastName = "Pendergast", Phone = "1111111111" },
+            new Person { Id = "2", UserId = userId, FirstName = "Sue", LastName = "Finklestein", Phone = "2222222222" },
+            new Person { Id = "3", UserId = userId, FirstName = "Jim", LastName = "Forrestor", Phone = "3333333333" },
+            new Person { Id = "4", UserId = userId, FirstName = "Craig", LastName = "Pattington", Phone = "4444444444" },
+            new Person { Id = "5", UserId = userId, FirstName = "Olly", LastName = "Fowler", Phone = "5555555555" },
+            new Person { Id = "6", UserId = userId, FirstName = "Phil", LastName = "Pumpernickel", Phone = "6666666666" }
         };
 
         private List<Message> GetMessagesForEvent1() => new List<Message>

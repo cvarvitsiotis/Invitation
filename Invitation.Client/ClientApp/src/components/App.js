@@ -7,7 +7,6 @@ import PersonList from './PersonList';
 import AddPersonList from './AddPersonList';
 import AddEvent from './AddEvent';
 import Home from './Home';
-import Login from './Login';
 import Navbar from './Navbar';
 import PrivateRoute from './PrivateRoute';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -39,17 +38,16 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <div>
-          <Navbar />
+          <Route component={Navbar} />
           <main role="main" className="container">
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/events" component={EventList} />
+              <PrivateRoute exact path="/events" component={EventList} />
               <PrivateRoute path="/people" component={PersonList} />
-              <Route exact path="/events/:id" component={Event} />
-              <Route path="/events/:id/addPerson" component={AddPersonList} />
-              <Route path="/events/:id/addMessage" component={AddMessage} />
-              <Route path="/addEvent" component={AddEvent} />
-              <Route path="/login" component={Login} />
+              <PrivateRoute exact path="/events/:id" component={Event} />
+              <PrivateRoute path="/events/:id/addPerson" component={AddPersonList} />
+              <PrivateRoute path="/events/:id/addMessage" component={AddMessage} />
+              <PrivateRoute path="/addEvent" component={AddEvent} />
               <Route component={NoMatch} />
             </Switch>
           </main>
@@ -58,5 +56,5 @@ class App extends React.Component {
     );
   }
 }
-//<Route path="/people" component={PersonList} />
+
 export default App;

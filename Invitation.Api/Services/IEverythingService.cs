@@ -1,10 +1,11 @@
 using Invitation.Api.Models;
+using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
 {
     public interface IEverythingService
     {
-        Everything GetEverything();
+        Task<Everything> GetEverything(string userId);
         
         void CreateEverythingIfIncomplete();
     }

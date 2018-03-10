@@ -1,6 +1,7 @@
 ﻿using Invitation.Api.Models;
 using Invitation.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Invitation.Api.Controllers
 {
@@ -15,10 +16,10 @@ namespace Invitation.Api.Controllers
             _everythingService = everythingService;
         }
 
-        [HttpGet]
-        public Everything GetEverything()
+        [HttpGet("{userId}")]
+        public async Task<Everything> GetEverything(string userId)
         {
-            return _everythingService.GetEverything();
+            return await _everythingService.GetEverything(userId);
         }
     }
 }
