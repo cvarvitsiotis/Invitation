@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
 using Invitation.Api.Services;
@@ -18,17 +19,17 @@ namespace Invitation.Api.Services
             _eventService = eventService;
         }
 
-        public PersonStatus GetPersonStatus(string eventId, string id)
+        public async Task<PersonStatus> GetPersonStatusAsync(string userId, string eventId, string id)
         {
-            return _eventService.GetEvent(eventId).PersonStatuses?.FirstOrDefault(s => s.Id == id);
+            return (await _eventService.GetEventAsync(userId, eventId))?.PersonStatuses?.FirstOrDefault(s => s.Id == id);
         }
 
-        public PersonStatus AddPersonStatus(string eventId, AddPersonStatus addPersonStatus)
+        public async Task<PersonStatus> AddPersonStatusAsync(string userId, string eventId, AddPersonStatus addPersonStatus)
         {
-            Person person = _personService.GetPerson(addPersonStatus.PersonId).Result;
+            Person person = await _personService.GetPersonAsync(userId, addPersonStatus.PersonId);
             if (person == null) return null;
 
-            var @event = _eventService.GetEvent(eventId);
+            var @event = await _eventService.GetEventAsync(userId, eventId);
             if (@event == null) return null;
 
             string personStatusId = GetNextId(@event.PersonStatuses.Select(s => s.Id));
@@ -40,7 +41,7 @@ namespace Invitation.Api.Services
             };
 
             @event.PersonStatuses.Add(personStatus);
-            _apiContext.SaveChanges();
+            await _apiContext.SaveChangesAsync();
             return personStatus;
         }
     }

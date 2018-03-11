@@ -5,8 +5,8 @@ namespace Invitation.Api.Services
 {
     public interface IEverythingService
     {
-        Task<Everything> GetEverything(string userId);
+        Task<Everything> GetEverythingAsync(string userId);
         
-        void CreateEverythingIfIncomplete();
+        Task CreateEverythingIfIncompleteAsync();
     }
 }

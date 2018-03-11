@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
 using Invitation.Api.Services;
@@ -16,9 +17,9 @@ namespace Invitation.Api.Services
             _eventService = eventService;
         }
 
-        public Message AddMessage(string eventId, AddMessage addMessage)
+        public async Task<Message> AddMessageAsync(string userId, string eventId, AddMessage addMessage)
         {
-            var @event = _eventService.GetEvent(eventId);
+            var @event = await _eventService.GetEventAsync(userId, eventId);
             if (@event == null) return null;
 
             string messageId = GetNextId(@event.Messages.Select(m => m.Id));
@@ -30,13 +31,13 @@ namespace Invitation.Api.Services
             };
 
             @event.Messages.Add(message);
-            _apiContext.SaveChanges();
+            await _apiContext.SaveChangesAsync();
             return message;
         }
 
-        public Message GetMessage(string eventId, string id)
+        public async Task<Message> GetMessageAsync(string userId, string eventId, string id)
         {
-            return _eventService.GetEvent(eventId).Messages?.FirstOrDefault(m => m.Id == id);
+            return (await _eventService.GetEventAsync(userId, eventId))?.Messages?.FirstOrDefault(m => m.Id == id);
         }
     }
 }

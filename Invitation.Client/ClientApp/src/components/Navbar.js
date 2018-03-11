@@ -4,7 +4,7 @@ import { Route, Link, NavLink } from 'react-router-dom';
 
 class Navbar extends React.PureComponent {
   render() {
-    const { userId, userPicture, signOut } = this.props;
+    const { userIsAuthenticated, userPicture, signOut } = this.props;
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <Link to="/" className="navbar-brand">
@@ -16,7 +16,7 @@ class Navbar extends React.PureComponent {
             <NavLink to="/people" className="nav-item nav-link" activeClassName="active">People</NavLink>
           </div>
           <div>
-            {userId &&
+            {userIsAuthenticated &&
               <Route render={() => (
                 <div className="navbar-nav d-inline-block">
                   <Link to="#" className="nav-item nav-link" onClick={signOut}>Log out</Link>
@@ -38,7 +38,7 @@ class Navbar extends React.PureComponent {
 
 function extraProps(props, store) {
   return {
-    userId: store.getState().userId,
+    userIsAuthenticated: store.getState().userIsAuthenticated,
     userPicture: store.getState().userPicture,
     signOut: () => {
       store.signOut();

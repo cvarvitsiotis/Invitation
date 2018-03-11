@@ -1,4 +1,5 @@
-﻿using Invitation.Api.Models;
+﻿using System.Threading.Tasks;
+using Invitation.Api.Models;
 using Invitation.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,13 +17,13 @@ namespace Invitation.Api.Controllers
             _everythingService = everythingService;
             _eventService = eventService;
 
-            _everythingService.CreateEverythingIfIncomplete();
+            _everythingService.CreateEverythingIfIncompleteAsync();
         }
 
         [HttpGet("{id}", Name = "GetEvent")]
-        public IActionResult GetEvent(string id)
+        public async Task<IActionResult> GetEvent(string id)
         {
-            var @event = _eventService.GetEvent(id);
+            var @event = await _eventService.GetEventAsync(User.Identity.Name, id);
 
             if (@event == null) return NotFound();
 
@@ -30,11 +31,11 @@ namespace Invitation.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEvent([FromBody] AddEvent addEvent)
+        public async Task<IActionResult> CreateEvent([FromBody] AddEvent addEvent)
         {
             if (addEvent == null) return BadRequest();
 
-            Event @event = _eventService.CreateEvent(addEvent);
+            Event @event = await _eventService.CreateEventAsync(User.Identity.Name, addEvent);
 
             return CreatedAtRoute("GetEvent", new { id = @event.Id }, @event);
         }

@@ -1,11 +1,12 @@
-﻿using Invitation.Api.Models;
+﻿using System.Threading.Tasks;
+using Invitation.Api.Models;
 using Invitation.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Invitation.Api.Controllers
 {
-    [Route("api/events/{eventId}/personStatuses")]
     [ApiController]
+    [Route("api/events/{eventId}/personStatuses")]
     public class PersonStatusesController : Controller
     {
         private readonly IEverythingService _everythingService;
@@ -16,13 +17,13 @@ namespace Invitation.Api.Controllers
             _everythingService = everythingService;
             _personStatusService = personStatusService;
 
-            _everythingService.CreateEverythingIfIncomplete();
+            _everythingService.CreateEverythingIfIncompleteAsync();
         }
 
         [HttpGet("{id}", Name = "GetPersonStatus")]
-        public IActionResult GetPersonStatus(string eventId, string id)
+        public async Task<IActionResult> GetPersonStatus(string eventId, string id)
         {
-            PersonStatus personStatus = _personStatusService.GetPersonStatus(eventId, id);
+            PersonStatus personStatus = await _personStatusService.GetPersonStatusAsync(User.Identity.Name, eventId, id);
 
             if (personStatus == null) return NotFound();
 
@@ -30,11 +31,11 @@ namespace Invitation.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddPersonStatus(string eventId, [FromBody] AddPersonStatus addPersonStatus)
+        public async Task<IActionResult> AddPersonStatus(string eventId, [FromBody] AddPersonStatus addPersonStatus)
         {
             if (addPersonStatus == null) return BadRequest();
 
-            PersonStatus personStatus = _personStatusService.AddPersonStatus(eventId, addPersonStatus);
+            PersonStatus personStatus = await _personStatusService.AddPersonStatusAsync(User.Identity.Name, eventId, addPersonStatus);
 
             if (personStatus == null) return BadRequest();
 

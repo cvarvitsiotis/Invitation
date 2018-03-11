@@ -6,12 +6,12 @@ namespace Invitation.Api.Services
 {
     public interface IEventService
     {
-        bool Any();
+        Task<bool> AnyAsync();
         
-        Event GetEvent(string id);
+        Task<Event> GetEventAsync(string userId, string id);
 
-        Task<List<Event>> GetEventsByUserId(string userId);
+        Task<List<Event>> GetEventsAsync(string userId);
 
-        Event CreateEvent(AddEvent addEvent);
+        Task<Event> CreateEventAsync(string userId, AddEvent addEvent);
     }
 }

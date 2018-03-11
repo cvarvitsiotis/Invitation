@@ -17,20 +17,20 @@ namespace Invitation.Api.Services
             _personService = personService;
         }
 
-        public async Task<Everything> GetEverything(string userId)
+        public async Task<Everything> GetEverythingAsync(string userId)
         {
-            CreateEverythingIfIncomplete();
+            await CreateEverythingIfIncompleteAsync();
 
             return new Everything
             {
-                Events = await _eventService.GetEventsByUserId(userId),
-                People = await _personService.GetPeopleByUserId(userId)
+                Events = await _eventService.GetEventsAsync(userId),
+                People = await _personService.GetPeopleAsync(userId)
             };
         }
 
-        public void CreateEverythingIfIncomplete()
+        public async Task CreateEverythingIfIncompleteAsync()
         {
-            if (_eventService.Any() && _personService.Any())
+            if (await _eventService.AnyAsync() && await _personService.Any())
             {
                 return;
             }
@@ -38,10 +38,10 @@ namespace Invitation.Api.Services
             _apiContext.Events.RemoveRange(_apiContext.Events);
             _apiContext.People.RemoveRange(_apiContext.People);
 
-            _apiContext.People.AddRange(new TestData().GetPeople());
-            _apiContext.Events.AddRange(new TestData().GetEvents());
+            await _apiContext.People.AddRangeAsync(new TestData().GetPeople());
+            await _apiContext.Events.AddRangeAsync(new TestData().GetEvents());
             
-            _apiContext.SaveChanges();
+            await _apiContext.SaveChangesAsync();
         }
     }
 }

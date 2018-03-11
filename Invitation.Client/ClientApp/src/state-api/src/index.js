@@ -3,12 +3,14 @@ import Authentication from '../../authentication/authentication';
 
 class StateApi {  
   
-  data = {
+  initialData = {
     events: {},
     people: {},
-    userId: null,
+    userIsAuthenticated: false,
     userPicture: null
-  };  
+  };
+  
+  data = this.initialData;  
   subscriptions = {};  
   lastSubscriptionId = 0;
   authentication = new Authentication();
@@ -93,7 +95,7 @@ class StateApi {
   };
   
   addEvent = (description, date) => {
-    const addEvent = { userId: this.data.userId, description, date: date.toJSON() };
+    const addEvent = { description, date: date.toJSON() };
     const url = 'https://localhost:44381/api/events';
     axios.post(url, addEvent)
       .then(resp => {
@@ -104,17 +106,14 @@ class StateApi {
       });
   };
 
-  mergeUser = (userId, userPicture) => { 
-    this.data.userId = userId;
+  mergeUser = (userIsAuthenticated, userPicture) => { 
+    this.data.userIsAuthenticated = userIsAuthenticated;
     this.data.userPicture = userPicture;
     this.notifySubscribers();
   };
 
   clearAllData = () => {
-    this.data.events = null;
-    this.data.people = null;
-    this.data.userId = null;
-    this.data.userPicture = null;
+    this.data = this.initialData;
     this.notifySubscribers();
   };
 
@@ -130,9 +129,9 @@ class StateApi {
     this.postAndGetFreshEventAndMerge(action, addPersonStatus, eventId);
   };
 
-  getEventsAndPeople = async userId => {
+  getEventsAndPeople = async () => {
     try {
-      const response = await axios.get(`https://localhost:44381/api/everything/${userId}`);
+      const response = await axios.get('https://localhost:44381/api/everything');
       this.mapEventsAndPeopleAndTheirPropsIntoObjectsAndMerge(response.data);
     } catch(error) {
       console.log(error);
@@ -142,9 +141,9 @@ class StateApi {
   signIn = () => {
     this.authentication.signIn()
       .then(result => {
-        if (!result.userId) return;
-        this.mergeUser(result.userId, result.userPicture);
-        this.getEventsAndPeople(result.userId)
+        if (!result.userIsAuthenticated) return;
+        this.mergeUser(result.userIsAuthenticated, result.userPicture);
+        this.getEventsAndPeople()
           .then(() => {
           })
           .catch(error => {

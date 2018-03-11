@@ -17,11 +17,11 @@ class Authentication {
   signIn = async () => {
     try {
       const externalCredential = await this.signInExternally();
-      if (!externalCredential.idToken) return ({ userId: null, userPicture: null });
+      if (!externalCredential.idToken) return ({ userIsAuthenticated: false, userPicture: null });
       return await this.signInInternally(externalCredential.idToken);
     } catch(error) {
       console.log(error);
-      return ({ userId: null, userPicture: null });
+      return ({ userIsAuthenticated: false, userPicture: null });
     }
   };
 
@@ -40,23 +40,27 @@ class Authentication {
   };
   
   signInInternally = async idToken => {
-    try {
-      const resp = await axios.get(`https://localhost:44381/api/authentication/${idToken}`);
-      return ({ userId: resp.data.sub, userPicture: resp.data.picture });
-    } catch(error) {
-      console.log(error);
-      return ({ userId: null, userPicture: null });
-    }
+    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${idToken}`);
+    return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
   };
 
   signOut = async () => {
     try {
-      await window.googleyolo.disableAutoSignIn();
+      await this.signOutExternally();
+      await this.signOutInternally();
       return true;
     } catch(error) {
       console.log(error);
       return false;
     }
+  };
+
+  signOutExternally = async () => {
+    await window.googleyolo.disableAutoSignIn();
+  };
+  
+  signOutInternally = async () => {
+    await axios.get('https://localhost:44381/api/auth/signOut');
   };
 }
 

@@ -18,35 +18,35 @@ namespace Invitation.Api.Services
             _personService = personService;
         }
 
-        public bool Any()
+        public async Task<bool> AnyAsync()
         {
-            return _apiContext.Events.Any();
+            return await _apiContext.Events.AnyAsync();
         }
 
-        public Event GetEvent(string id)
+        public async Task<Event> GetEventAsync(string userId, string id)
         {
-            return _apiContext.Events.Where(e => e.Id == id).Include(e => e.Messages).Include(e => e.PersonStatuses).FirstOrDefault();
+            return await _apiContext.Events.Where(e => e.UserId == userId && e.Id == id).Include(e => e.Messages).Include(e => e.PersonStatuses).FirstOrDefaultAsync();
         }
 
-        public async Task<List<Event>> GetEventsByUserId(string userId)
+        public async Task<List<Event>> GetEventsAsync(string userId)
         {
             return await _apiContext.Events.Where(e => e.UserId == userId).Include(e => e.Messages).Include(e => e.PersonStatuses).ToListAsync();
         }
 
-        public Event CreateEvent(AddEvent addEvent)
+        public async Task<Event> CreateEventAsync(string userId, AddEvent addEvent)
         {
             string eventId = GetNextId(_apiContext.Events.Select(e => e.Id));
             Event @event = new Event
             {
                 Id = eventId,
-                UserId = addEvent.UserId,
+                UserId = userId,
                 Description = addEvent.Description,
                 Date = addEvent.Date
             };
             
-            _apiContext.Events.Add(@event);
-            _apiContext.SaveChanges();
-            return GetEvent(eventId);
+            await _apiContext.Events.AddAsync(@event);
+            await _apiContext.SaveChangesAsync();
+            return await GetEventAsync(userId, eventId);
         }
     }
 }

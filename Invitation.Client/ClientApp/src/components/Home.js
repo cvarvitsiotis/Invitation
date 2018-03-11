@@ -3,11 +3,11 @@ import storeProvider from './storeProvider';
 
 class Home extends React.PureComponent {
   render() {
-    const { userId, signIn } = this.props;
+    const { userIsAuthenticated, signIn } = this.props;
     return (
       <div className="text-center">
         <h3 className="text-primary font-weight-light">Let&#39;s get started!</h3>
-        {!userId &&
+        {!userIsAuthenticated &&
           <button type="button" className="btn btn-outline-primary mt-2" onClick={signIn}>Sign in with Google</button>
         }
       </div>
@@ -17,7 +17,7 @@ class Home extends React.PureComponent {
 
 function extraProps(props, store) {
   return {
-    userId: store.getState().userId,
+    userIsAuthenticated: store.getState().userIsAuthenticated,
     signIn: () => {
       store.signIn();
     }

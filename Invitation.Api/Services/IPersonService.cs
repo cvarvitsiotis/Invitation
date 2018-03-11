@@ -6,10 +6,10 @@ namespace Invitation.Api.Services
 {
     public interface IPersonService
     {
-        bool Any();
+        Task<bool> Any();
         
-        Task<List<Person>> GetPeopleByUserId(string userId);
+        Task<List<Person>> GetPeopleAsync(string userId);
 
-        Task<Person> GetPerson(string id);
+        Task<Person> GetPersonAsync(string userId, string id);
     }
 }

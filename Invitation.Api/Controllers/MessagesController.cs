@@ -1,11 +1,12 @@
-﻿using Invitation.Api.Models;
+﻿using System.Threading.Tasks;
+using Invitation.Api.Models;
 using Invitation.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Invitation.Api.Controllers
 {
-    [Route("api/events/{eventId}/messages")]
     [ApiController]
+    [Route("api/events/{eventId}/messages")]
     public class MessagesController : Controller
     {
         private readonly IEverythingService _everythingService;
@@ -16,13 +17,13 @@ namespace Invitation.Api.Controllers
             _everythingService = everythingService;
             _messageService = messageService;
 
-            _everythingService.CreateEverythingIfIncomplete();
+            _everythingService.CreateEverythingIfIncompleteAsync();
         }
 
         [HttpGet("{id}", Name = "GetMessage")]
-        public IActionResult GetMessage(string eventId, string id)
+        public async Task<IActionResult> GetMessage(string eventId, string id)
         {
-            Message message = _messageService.GetMessage(eventId, id);
+            Message message = await _messageService.GetMessageAsync(User.Identity.Name, eventId, id);
 
             if (message == null) return NotFound();
 
@@ -30,11 +31,11 @@ namespace Invitation.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMessage(string eventId, [FromBody] AddMessage addMessage)
+        public async Task<IActionResult> AddMessage(string eventId, [FromBody] AddMessage addMessage)
         {
             if (addMessage == null) return BadRequest();
 
-            Message message = _messageService.AddMessage(eventId, addMessage);
+            Message message = await _messageService.AddMessageAsync(User.Identity.Name, eventId, addMessage);
 
             if (message == null) return BadRequest();
 

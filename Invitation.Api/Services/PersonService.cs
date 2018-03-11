@@ -16,19 +16,19 @@ namespace Invitation.Api.Services
             _apiContext = apiContext;
         }
 
-        public bool Any()
+        public async Task<bool> Any()
         {
-            return _apiContext.People.Any();
+            return await _apiContext.People.AnyAsync();
         }
 
-        public async Task<List<Person>> GetPeopleByUserId(string userId)
+        public async Task<List<Person>> GetPeopleAsync(string userId)
         {
             return await _apiContext.People.Where(p => p.UserId == userId).ToListAsync();
         }
 
-        public async Task<Person> GetPerson(string id)
+        public async Task<Person> GetPersonAsync(string userId, string id)
         {
-            return (await GetPeopleByUserId(null)).FirstOrDefault(p => p.Id == id);
+            return (await GetPeopleAsync(userId))?.FirstOrDefault(p => p.Id == id);
         }
     }
 }

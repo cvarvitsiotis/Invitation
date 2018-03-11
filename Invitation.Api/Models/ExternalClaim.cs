@@ -1,6 +1,6 @@
 namespace Invitation.Api.Models
 {
-    public class ExternalClaim
+    public class ExternalClaimsIdentity
     {
         public string Aud { get; set; }
         public string Sub { get; set; }

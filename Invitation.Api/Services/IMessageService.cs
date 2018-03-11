@@ -1,11 +1,12 @@
+using System.Threading.Tasks;
 using Invitation.Api.Models;
 
 namespace Invitation.Api.Services
 {
     public interface IMessageService
     {
-        Message GetMessage(string eventId, string id);
+        Task<Message> GetMessageAsync(string userId, string eventId, string id);
 
-        Message AddMessage(string eventId, AddMessage addMessage);
+        Task<Message> AddMessageAsync(string userId, string eventId, AddMessage addMessage);
     }
 }
