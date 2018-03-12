@@ -77,7 +77,8 @@ namespace Invitation.Api
             app.UseCors(builder => builder
                 .WithOrigins("https://localhost:44326")
                  .AllowAnyMethod()
-                 .AllowAnyHeader());
+                 .AllowAnyHeader()
+                 .AllowCredentials());
 
             app.UseHttpsRedirection();
             app.UseMvc();

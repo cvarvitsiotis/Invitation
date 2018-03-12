@@ -40,7 +40,11 @@ class Authentication {
   };
   
   signInInternally = async idToken => {
-    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${idToken}`);
+    const resp = await axios({
+      method: 'get',
+      url: `https://localhost:44381/api/auth/signIn/${idToken}`,
+      withCredentials: true
+    });
     return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
   };
 
@@ -56,11 +60,16 @@ class Authentication {
   };
 
   signOutExternally = async () => {
+    if (!window.googleyolo) return;
     await window.googleyolo.disableAutoSignIn();
   };
   
   signOutInternally = async () => {
-    await axios.get('https://localhost:44381/api/auth/signOut');
+    await axios({
+      method: 'get',
+      url: 'https://localhost:44381/api/auth/signOut',
+      withCredentials: true
+    });
   };
 }
 

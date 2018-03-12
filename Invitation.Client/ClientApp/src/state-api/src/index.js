@@ -2,15 +2,15 @@ import axios from 'axios';
 import Authentication from '../../authentication/authentication';
 
 class StateApi {  
-  
-  initialData = {
+
+  getInitialData = () => ({
     events: {},
     people: {},
     userIsAuthenticated: false,
     userPicture: null
-  };
+  });
   
-  data = this.initialData;  
+  data = this.getInitialData();
   subscriptions = {};  
   lastSubscriptionId = 0;
   authentication = new Authentication();
@@ -45,10 +45,18 @@ class StateApi {
   }
 
   postAndGetFreshEventAndMerge = (action, data, eventId) => {
-    const url = `https://localhost:44381/api/${action}`;
-    axios.post(url, data)
+    axios.post({
+      method: 'post',
+      url: `https://localhost:44381/api/${action}`,
+      data: data,
+      withCredentials: true
+    })
       .then(() => {
-        return axios.get(`https://localhost:44381/api/events/${eventId}`);
+        return axios({
+          method: 'get',
+          url: `https://localhost:44381/api/events/${eventId}`,
+          withCredentials: true
+        });
       })
       .then(resp => {
         this.mapEventPropsIntoObjectsAndMerge(resp.data);
@@ -96,8 +104,12 @@ class StateApi {
   
   addEvent = (description, date) => {
     const addEvent = { description, date: date.toJSON() };
-    const url = 'https://localhost:44381/api/events';
-    axios.post(url, addEvent)
+    axios.post({
+      method: 'post',
+      url: 'https://localhost:44381/api/events',
+      data: addEvent,
+      withCredentials: true
+    })
       .then(resp => {
         this.mapEventPropsIntoObjectsAndMerge(resp.data);
       })
@@ -113,7 +125,7 @@ class StateApi {
   };
 
   clearAllData = () => {
-    this.data = this.initialData;
+    this.data = this.getInitialData();
     this.notifySubscribers();
   };
 
@@ -131,7 +143,11 @@ class StateApi {
 
   getEventsAndPeople = async () => {
     try {
-      const response = await axios.get('https://localhost:44381/api/everything');
+      const response = await axios({
+        method: 'get',
+        url: 'https://localhost:44381/api/everything',
+        withCredentials: true
+      });
       this.mapEventsAndPeopleAndTheirPropsIntoObjectsAndMerge(response.data);
     } catch(error) {
       console.log(error);
