@@ -22,7 +22,7 @@ namespace Invitation.Api.Services
             var @event = await _eventService.GetEventAsync(userId, eventId);
             if (@event == null) return null;
 
-            string messageId = GetNextId(@event.Messages.Select(m => m.Id));
+            string messageId = GetNextId((await _eventService.GetEveryonesEventsAsync()).SelectMany(e => e.Messages).Select(m => m.Id));
             Message message = new Message
             {
                 Id = messageId,

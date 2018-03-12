@@ -33,6 +33,11 @@ namespace Invitation.Api.Services
             return await _apiContext.Events.Where(e => e.UserId == userId).Include(e => e.Messages).Include(e => e.PersonStatuses).ToListAsync();
         }
 
+        public async Task<List<Event>> GetEveryonesEventsAsync()
+        {
+            return await _apiContext.Events.Include(e => e.Messages).Include(e => e.PersonStatuses).ToListAsync();
+        }
+        
         public async Task<Event> CreateEventAsync(string userId, AddEvent addEvent)
         {
             string eventId = GetNextId(_apiContext.Events.Select(e => e.Id));

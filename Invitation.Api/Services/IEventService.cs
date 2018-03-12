@@ -12,6 +12,8 @@ namespace Invitation.Api.Services
 
         Task<List<Event>> GetEventsAsync(string userId);
 
+        Task<List<Event>> GetEveryonesEventsAsync();
+
         Task<Event> CreateEventAsync(string userId, AddEvent addEvent);
     }
 }

@@ -32,7 +32,7 @@ namespace Invitation.Api.Services
             var @event = await _eventService.GetEventAsync(userId, eventId);
             if (@event == null) return null;
 
-            string personStatusId = GetNextId(@event.PersonStatuses.Select(s => s.Id));
+            string personStatusId = GetNextId((await _eventService.GetEveryonesEventsAsync()).SelectMany(e => e.PersonStatuses).Select(s => s.Id));
             PersonStatus personStatus = new PersonStatus
             {
                 Id = personStatusId,
