@@ -40,11 +40,7 @@ class Authentication {
   };
   
   signInInternally = async idToken => {
-    const resp = await axios({
-      method: 'get',
-      url: `https://localhost:44381/api/auth/signIn/${idToken}`,
-      withCredentials: true
-    });
+    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${idToken}`, { withCredentials: true });
     return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
   };
 
@@ -65,11 +61,7 @@ class Authentication {
   };
   
   signOutInternally = async () => {
-    await axios({
-      method: 'get',
-      url: 'https://localhost:44381/api/auth/signOut',
-      withCredentials: true
-    });
+    await axios.get('https://localhost:44381/api/auth/signOut', { withCredentials: true });
   };
 }
 
