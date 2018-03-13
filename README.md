@@ -5,7 +5,7 @@ This app lets you invite your friends to various events via text message, and it
 
 ### Primary Technologies
 * React SPA
-* Asp.NET Core API
+* ASP.NET Core API
 * Token service: Google
 * Text message service: Twilio
 
