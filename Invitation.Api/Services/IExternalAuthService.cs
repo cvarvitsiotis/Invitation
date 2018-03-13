@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
 {
-    public interface IAuthService
+    public interface IExternalAuthService
     {
         Task<ExternalClaimsIdentity> AuthenticateAsync(string idToken);
     }

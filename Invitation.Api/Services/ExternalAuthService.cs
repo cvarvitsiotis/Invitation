@@ -7,11 +7,11 @@ using Newtonsoft.Json;
 
 namespace Invitation.Api.Services
 {
-    public class AuthService : IAuthService
+    public class ExternalAuthService : IExternalAuthService
     {
         IHttpClientFactory _httpClientFactory;
 
-        public AuthService(IHttpClientFactory httpClientFactory)
+        public ExternalAuthService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }

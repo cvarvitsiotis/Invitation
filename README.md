@@ -12,6 +12,6 @@ This app lets you invite your friends to various events via text message, and it
 ### Authentication
 * OIDC implicit auth flow
 * Cookie authentication
-  * Primary auth cookie was implemented with HttpOnly to hide it from XSS.
-  * Additional, non-HttpOnly cookie was implemented to mitigate CSRF.
-  * FYI, cookies were chosen over tokens due to later's vulnerability to XSS.
+  * Primary auth cookie implemented with HttpOnly to hide it from XSS.
+  * Additional cookie and header token implemented to mitigate CSRF.
+  * FYI, primary auth cookie was chosen over JWT token due to later's vulnerability to XSS.

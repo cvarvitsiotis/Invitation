@@ -18,7 +18,9 @@ class Authentication {
     try {
       const externalCredential = await this.signInExternally();
       if (!externalCredential.idToken) return ({ userIsAuthenticated: false, userPicture: null });
-      return await this.signInInternally(externalCredential.idToken);
+      const internalCredentials = await this.signInInternally(externalCredential.idToken);
+      await this.getAntiForgeryTokens();
+      return internalCredentials;
     } catch(error) {
       console.log(error);
       return ({ userIsAuthenticated: false, userPicture: null });
@@ -42,6 +44,10 @@ class Authentication {
   signInInternally = async idToken => {
     const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${idToken}`, { withCredentials: true });
     return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
+  };
+
+  getAntiForgeryTokens = async () => {
+    await axios.get('https://localhost:44381/api/auth/getAntiForgeryTokens', { withCredentials: true });
   };
 
   signOut = async () => {

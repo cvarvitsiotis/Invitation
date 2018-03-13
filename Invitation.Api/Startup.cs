@@ -39,6 +39,9 @@ namespace Invitation.Api
                     };
                 });
 
+            //HeaderName must match axios's xsrfHeaderName
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
             services.AddCors();
             services.AddHttpClient();
             services.AddMvc(options =>
@@ -48,11 +51,13 @@ namespace Invitation.Api
                     .Build();
                 
                 options.Filters.Add(new AuthorizeFilter(policy));
+
+                options.Filters.Add(new ValidateAntiForgeryTokenAttribute());
             })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase("Api"));
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IExternalAuthService, ExternalAuthService>();
             services.AddScoped<IEverythingService, EverythingService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IMessageService, MessageService>();
