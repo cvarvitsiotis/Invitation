@@ -30,5 +30,39 @@ namespace Invitation.Api.Services
         {
             return (await GetPeopleAsync(userId))?.FirstOrDefault(p => p.Id == id);
         }
+
+        public async Task UpsertPeopleAsync(string userId, List<Person> newPeople)
+        {
+            var dedupedNewPeople = newPeople.GroupBy(
+                np => CreatePersonId(np.ExternalId, np.Phone), 
+                (key, value) => value.FirstOrDefault()
+            );
+
+            List<Person> oldPeople = await GetPeopleAsync(userId);
+
+            foreach (Person newPerson in dedupedNewPeople)
+            {
+                Person oldPerson = oldPeople.FirstOrDefault(op => op.Id == CreatePersonId(newPerson.ExternalId, newPerson.Phone));
+                if (oldPerson != null)
+                {
+                    oldPerson.FirstName = newPerson.FirstName;
+                    oldPerson.LastName = newPerson.LastName;
+                    oldPerson.Phone = newPerson.Phone;
+                }
+                else
+                {
+                    newPerson.Id = CreatePersonId(newPerson.ExternalId, newPerson.Phone);
+                    newPerson.UserId = userId;
+                    await _apiContext.People.AddAsync(newPerson);
+                }
+            }
+
+            await _apiContext.SaveChangesAsync();
+        }
+
+        private string CreatePersonId(string externalId, string phone)
+        {
+            return $"{externalId}_{phone}";
+        }
     }
 }

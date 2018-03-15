@@ -1,5 +1,6 @@
 import React from 'react';
 import storeProvider from './storeProvider';
+import '../styles/signInButton.css';
 
 class Home extends React.PureComponent {
   render() {
@@ -8,7 +9,7 @@ class Home extends React.PureComponent {
       <div className="text-center">
         <h3 className="text-primary font-weight-light">Let&#39;s get started!</h3>
         {!userIsAuthenticated &&
-          <button type="button" className="btn btn-outline-primary mt-2" onClick={signIn}>Sign in with Google</button>
+          <div className="g-signin2 mt-4" onClick={signIn}></div>
         }
       </div>
     );

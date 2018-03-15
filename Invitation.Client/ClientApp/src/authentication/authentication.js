@@ -2,23 +2,11 @@ import axios from 'axios';
 
 class Authentication {
   
-  authParams = {
-    supportedAuthMethods: [
-      'https://accounts.google.com'
-    ],
-    supportedIdTokenProviders: [
-      {
-        uri: 'https://accounts.google.com',
-        clientId: '488214841032-85h2a7318nf181cu9mrvuh0310muup0u.apps.googleusercontent.com'
-      }
-    ]
-  };
-
   signIn = async () => {
     try {
       const externalCredential = await this.signInExternally();
-      if (!externalCredential.idToken) return ({ userIsAuthenticated: false, userPicture: null });
-      const internalCredentials = await this.signInInternally(externalCredential.idToken);
+      if (!externalCredential.code) return ({ userIsAuthenticated: false, userPicture: null });
+      const internalCredentials = await this.signInInternally(externalCredential.code);
       await this.getAntiForgeryTokens();
       return internalCredentials;
     } catch(error) {
@@ -27,22 +15,12 @@ class Authentication {
     }
   };
 
-  signInExternally = async () => { 
-    if (!window.googleyolo) return ({ idToken: null });
-    try {
-      return await window.googleyolo.retrieve(this.authParams);
-    } catch(error) {
-      try {
-        return await window.googleyolo.hint(this.authParams);
-      } catch(error) {
-        console.log(error);
-        return ({ idToken: null });
-      }
-    }
+  signInExternally = async () => {
+    return await auth2.grantOfflineAccess(); //auth2 defined in googleAuth.js
   };
-  
-  signInInternally = async idToken => {
-    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${idToken}`, { withCredentials: true });
+
+  signInInternally = async authCode => {
+    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${authCode}`, { withCredentials: true });
     return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
   };
 

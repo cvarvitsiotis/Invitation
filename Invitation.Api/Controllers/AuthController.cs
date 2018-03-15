@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Invitation.Api.Models;
@@ -17,35 +18,45 @@ namespace Invitation.Api.Controllers
     public class AuthController : Controller
     {
         private readonly IExternalAuthService _externalAuthService;
+        private readonly IExternalApiService _externalApiService;
+        private readonly IPersonService _personService;
         private readonly IAntiforgery _antiforgery;
 
-        public AuthController(IExternalAuthService externalAuthService, IAntiforgery antiforgery)
+        public AuthController(IExternalAuthService externalAuthService, IExternalApiService externalApiService, IPersonService personService, IAntiforgery antiforgery)
         {
             _externalAuthService = externalAuthService;
+            _externalApiService = externalApiService;
+            _personService = personService;
             _antiforgery = antiforgery;
         }
 
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        [HttpGet("signIn/{idToken}")]
-        public async Task<IActionResult> SignIn(string idToken)
+        [HttpGet("signIn/{authCode}")]
+        public async Task<IActionResult> SignIn(string authCode)
         {
-            ExternalClaimsIdentity externalClaimsIdentity = await _externalAuthService.AuthenticateAsync(idToken);
-            
-            if (externalClaimsIdentity?.Sub == null) return BadRequest();
+            ExternalAccessTokenAndClaimsIdentity accessTokenAndClaimsIdentity = await _externalAuthService.GetAccessTokenAndClaimsIdentity(authCode);
+
+            if (accessTokenAndClaimsIdentity.ExternalClaimsIdentity?.Sub == null) return BadRequest();
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, externalClaimsIdentity?.Sub)
+                new Claim(ClaimTypes.Name, accessTokenAndClaimsIdentity.ExternalClaimsIdentity.Sub)
             };
-
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, 
-                new ClaimsPrincipal(claimsIdentity));
+            if (!string.IsNullOrEmpty(accessTokenAndClaimsIdentity.AccessToken))
+            {
+                List<Person> people = await _externalApiService.GetPeopleAsync(accessTokenAndClaimsIdentity.AccessToken);
 
-            return Ok(new { UserIsAuthenticated = true, UserPicture = externalClaimsIdentity.Picture });
+                if ((people?.Any()).GetValueOrDefault())
+                {
+                    await _personService.UpsertPeopleAsync(accessTokenAndClaimsIdentity.ExternalClaimsIdentity.Sub, people);
+                }
+            }
+
+            return Ok(new { UserIsAuthenticated = true, UserPicture = accessTokenAndClaimsIdentity.ExternalClaimsIdentity.Picture });
         }
 
         [IgnoreAntiforgeryToken]
@@ -63,8 +74,7 @@ namespace Invitation.Api.Controllers
         [HttpGet("signOut")]
         public async Task<IActionResult> SignOut()
         {
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Ok();
         }
