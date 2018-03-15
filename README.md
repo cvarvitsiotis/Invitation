@@ -10,8 +10,8 @@ This app lets you invite your friends to various events via text message, and it
 * Twilio message service
 
 ### Authentication
-* OIDC implicit auth flow
-* Cookie authentication
+* OAuth 2.0 authorization code flow used to authenticate user and obtain his/her contacts
+* Thereafter, the user remains signed-in to the application via cookie
   * Primary auth cookie implemented with HttpOnly to hide it from XSS
   * Additional cookie and header token implemented to mitigate CSRF
   * FYI, primary auth cookie was chosen over JWT token due to later's vulnerability to XSS
