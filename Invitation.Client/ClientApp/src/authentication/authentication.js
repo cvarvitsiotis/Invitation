@@ -16,11 +16,11 @@ class Authentication {
   };
 
   signInExternally = async () => {
-    return await auth2.grantOfflineAccess(); //auth2 defined in googleAuth.js
+    return await window.auth2.grantOfflineAccess();
   };
 
   signInInternally = async authCode => {
-    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${authCode}`, { withCredentials: true });
+    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${encodeURIComponent(authCode)}`);
     return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
   };
 

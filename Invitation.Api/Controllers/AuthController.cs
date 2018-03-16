@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Invitation.Api.Models;
@@ -35,9 +36,9 @@ namespace Invitation.Api.Controllers
         [HttpGet("signIn/{authCode}")]
         public async Task<IActionResult> SignIn(string authCode)
         {
-            ExternalAccessTokenAndClaimsIdentity accessTokenAndClaimsIdentity = await _externalAuthService.GetAccessTokenAndClaimsIdentity(authCode);
+            ExternalAccessTokenAndClaimsIdentity accessTokenAndClaimsIdentity = await _externalAuthService.GetAccessTokenAndClaimsIdentity(WebUtility.UrlDecode(authCode));
 
-            if (accessTokenAndClaimsIdentity.ExternalClaimsIdentity?.Sub == null) return BadRequest();
+            if (accessTokenAndClaimsIdentity?.ExternalClaimsIdentity?.Sub == null) return BadRequest();
 
             var claims = new List<Claim>
             {
