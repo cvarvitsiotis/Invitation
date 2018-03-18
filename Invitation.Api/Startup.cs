@@ -58,7 +58,7 @@ namespace Invitation.Api
 
             services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase("Api"));
             services.AddScoped<IExternalAuthService, ExternalAuthService>();
-            services.AddScoped<IExternalApiService, ExternalApiService>();
+            services.AddScoped<IExternalPersonService, ExternalPersonService>();
             services.AddScoped<IEverythingService, EverythingService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IMessageService, MessageService>();

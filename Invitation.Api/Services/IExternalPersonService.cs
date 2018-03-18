@@ -4,7 +4,7 @@ using Invitation.Api.Models;
 
 namespace Invitation.Api.Services
 {
-    public interface IExternalApiService
+    public interface IExternalPersonService
     {
         Task<List<Person>> GetPeopleAsync(string accessToken);
     }

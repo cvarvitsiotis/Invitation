@@ -19,14 +19,14 @@ namespace Invitation.Api.Controllers
     public class AuthController : Controller
     {
         private readonly IExternalAuthService _externalAuthService;
-        private readonly IExternalApiService _externalApiService;
+        private readonly IExternalPersonService _externalPersonService;
         private readonly IPersonService _personService;
         private readonly IAntiforgery _antiforgery;
 
-        public AuthController(IExternalAuthService externalAuthService, IExternalApiService externalApiService, IPersonService personService, IAntiforgery antiforgery)
+        public AuthController(IExternalAuthService externalAuthService, IExternalPersonService externalPersonService, IPersonService personService, IAntiforgery antiforgery)
         {
             _externalAuthService = externalAuthService;
-            _externalApiService = externalApiService;
+            _externalPersonService = externalPersonService;
             _personService = personService;
             _antiforgery = antiforgery;
         }
@@ -49,7 +49,7 @@ namespace Invitation.Api.Controllers
 
             if (!string.IsNullOrEmpty(accessTokenAndClaimsIdentity.AccessToken))
             {
-                List<Person> people = await _externalApiService.GetPeopleAsync(accessTokenAndClaimsIdentity.AccessToken);
+                List<Person> people = await _externalPersonService.GetPeopleAsync(accessTokenAndClaimsIdentity.AccessToken);
 
                 if ((people?.Any()).GetValueOrDefault())
                 {

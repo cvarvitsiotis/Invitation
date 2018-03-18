@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
 {
-    public class ExternalApiService : IExternalApiService
+    public class ExternalPersonService : IExternalPersonService
     {
         private const string clientId = "488214841032-85h2a7318nf181cu9mrvuh0310muup0u.apps.googleusercontent.com";
         IHttpClientFactory _httpClientFactory;
 
-        public ExternalApiService(IHttpClientFactory httpClientFactory)
+        public ExternalPersonService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
