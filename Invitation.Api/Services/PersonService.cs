@@ -16,7 +16,7 @@ namespace Invitation.Api.Services
             _apiContext = apiContext;
         }
 
-        public async Task<bool> Any()
+        public async Task<bool> AnyAsync()
         {
             return await _apiContext.People.AnyAsync();
         }
@@ -33,13 +33,13 @@ namespace Invitation.Api.Services
 
         public async Task UpsertPeopleAsync(string userId, List<Person> newPeople)
         {
-            var dedupedNewPeople = newPeople.GroupBy(
+            IEnumerable<Person> dedupedNewPeople = newPeople.GroupBy(
                 np => CreatePersonId(np.ExternalId, np.Phone), 
                 (key, value) => value.FirstOrDefault()
             );
 
             List<Person> oldPeople = await GetPeopleAsync(userId);
-
+            
             foreach (Person newPerson in dedupedNewPeople)
             {
                 Person oldPerson = oldPeople.FirstOrDefault(op => op.Id == CreatePersonId(newPerson.ExternalId, newPerson.Phone));
@@ -47,6 +47,7 @@ namespace Invitation.Api.Services
                 {
                     oldPerson.FirstName = newPerson.FirstName;
                     oldPerson.LastName = newPerson.LastName;
+                    oldPerson.PhoneType = newPerson.PhoneType;
                     oldPerson.Phone = newPerson.Phone;
                 }
                 else

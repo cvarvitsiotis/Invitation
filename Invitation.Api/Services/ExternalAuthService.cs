@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,13 +31,11 @@ namespace Invitation.Api.Services
 
                 if (claimsIdentity == null) return null;
 
-                ExternalAccessTokenAndClaimsIdentity accessTokenAndClaimsIdentity = new ExternalAccessTokenAndClaimsIdentity
+                return new ExternalAccessTokenAndClaimsIdentity
                 {
                     AccessToken = tokensResponse.AccessToken,
                     ExternalClaimsIdentity = claimsIdentity
                 };
-
-                return accessTokenAndClaimsIdentity;
             }
             catch (Exception)
             {
@@ -47,19 +46,20 @@ namespace Invitation.Api.Services
 
         private async Task<ExternalTokensResponse> GetExternalTokensAsync(string authCode)
         {
-            HttpClient client = _httpClientFactory.CreateClient();            
-            var request = new
+            HttpClient client = _httpClientFactory.CreateClient();
+            string clientSecret = null;
+            Dictionary<string, string> dict = new Dictionary<string, string>
             {
-                code = authCode,
-                client_id = clientId,
-                client_secret = "",
-                grant_type = "authorization_code"
+                { "code", authCode },
+                { "client_id", clientId },
+                { "client_secret", clientSecret },
+                { "redirect_uri", "postmessage" },
+                { "grant_type", "authorization_code" }
             };
-            string serializedRequest = JsonConvert.SerializeObject(request);            
-            StringContent content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync("https://www.googleapis.com/oauth2/v4/token", content);            
-            if (!response.IsSuccessStatusCode) return null;            
-            string responseBody = await response.Content.ReadAsStringAsync();            
+            FormUrlEncodedContent  content = new FormUrlEncodedContent(dict);
+            HttpResponseMessage response = await client.PostAsync("https://www.googleapis.com/oauth2/v4/token", content);
+            if (!response.IsSuccessStatusCode) return null;
+            string responseBody = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ExternalTokensResponse>(responseBody);
         }
 

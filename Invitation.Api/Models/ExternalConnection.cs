@@ -2,6 +2,11 @@ using System.Collections.Generic;
 
 namespace Invitation.Api.Models
 {
+    public class ExternalConnectionResponse
+    {   
+        public List<ExternalConnection> Connections { get; set; }
+    }
+
     public class ExternalConnection
     {
         public string ResourceName { get; set; }

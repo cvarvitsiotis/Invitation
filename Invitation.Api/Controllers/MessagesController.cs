@@ -9,15 +9,11 @@ namespace Invitation.Api.Controllers
     [Route("api/events/{eventId}/messages")]
     public class MessagesController : Controller
     {
-        private readonly IEverythingService _everythingService;
         private readonly IMessageService _messageService;
 
-        public MessagesController(IEverythingService everythingService, IMessageService messageService)
+        public MessagesController(IMessageService messageService)
         {
-            _everythingService = everythingService;
             _messageService = messageService;
-
-            _everythingService.CreateEverythingIfIncompleteAsync();
         }
 
         [HttpGet("{id}", Name = "GetMessage")]

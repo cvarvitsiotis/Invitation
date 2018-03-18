@@ -9,15 +9,11 @@ namespace Invitation.Api.Controllers
     [ApiController]
     public class EventsController : Controller
     {
-        private readonly IEverythingService _everythingService;
         private readonly IEventService _eventService;
 
-        public EventsController(IEverythingService everythingService, IEventService eventService)
+        public EventsController(IEventService eventService)
         {
-            _everythingService = everythingService;
             _eventService = eventService;
-
-            _everythingService.CreateEverythingIfIncompleteAsync();
         }
 
         [HttpGet("{id}", Name = "GetEvent")]

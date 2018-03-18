@@ -20,7 +20,7 @@ class Authentication {
   };
 
   signInInternally = async authCode => {
-    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${encodeURIComponent(authCode)}`);
+    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${encodeURIComponent(authCode)}`, { withCredentials: true });
     return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
   };
 

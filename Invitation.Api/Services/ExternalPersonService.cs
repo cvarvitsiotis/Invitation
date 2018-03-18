@@ -26,8 +26,8 @@ namespace Invitation.Api.Services
                 HttpClient client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 string response = await client.GetStringAsync("https://people.googleapis.com/v1/people/me/connections?pageSize=1000&personFields=names,phoneNumbers");
-                List<ExternalConnection> connections = JsonConvert.DeserializeObject<List<ExternalConnection>>(response);
-                return GetPeopleFromConnections(connections);
+                ExternalConnectionResponse connectionResponse = JsonConvert.DeserializeObject<ExternalConnectionResponse>(response);
+                return GetPeopleFromConnectionResponse(connectionResponse);
             }
             catch (Exception)
             {
@@ -36,21 +36,23 @@ namespace Invitation.Api.Services
             return null;
         }
 
-        private List<Person> GetPeopleFromConnections(List<ExternalConnection> connections)
+        private List<Person> GetPeopleFromConnectionResponse(ExternalConnectionResponse connectionResponse)
         {
             List<Person> people = new List<Person>();
 
-            foreach (ExternalConnection connection in connections)
+            foreach (ExternalConnection connection in connectionResponse.Connections ?? new List<ExternalConnection>())
             {
                 string connectionId = connection.ResourceName?.Substring(7);
                 if (string.IsNullOrEmpty(connectionId)) continue;
 
-                var names = connection.Names?.Where(n => !string.IsNullOrEmpty(n?.GivenName) || string.IsNullOrEmpty(n?.FamilyName));
+                if (connection.Names == null || connection.PhoneNumbers == null) continue;
+
+                var names = connection.Names.Where(n => !string.IsNullOrEmpty(n.GivenName) || !string.IsNullOrEmpty(n.FamilyName));
                 if (!names.Any()) continue;
                 ExternalConnectionName primaryName = names.FirstOrDefault(n => (n.Metadata?.Primary).GetValueOrDefault());
                 ExternalConnectionName nameToUse = primaryName != null ? primaryName : names.First();
 
-                var phoneNumbers = connection.PhoneNumbers?.Where(p => !string.IsNullOrEmpty(p.CanonicalForm));
+                var phoneNumbers = connection.PhoneNumbers.Where(p => !string.IsNullOrEmpty(p.CanonicalForm));
                 if (!phoneNumbers.Any()) continue;
 
                 foreach (ExternalConnectionPhoneNumber phoneNumber in phoneNumbers)
@@ -60,13 +62,19 @@ namespace Invitation.Api.Services
                         ExternalId = connectionId,
                         FirstName = nameToUse.GivenName,
                         LastName = nameToUse.FamilyName,
-                        Phone = phoneNumber.CanonicalForm
+                        PhoneType = phoneNumber.FormattedType,
+                        Phone = GetWithoutUsCountryCode(phoneNumber.CanonicalForm)
                     };
                     people.Add(person);
                 }
             }
             
             return people;
+        }
+
+        private string GetWithoutUsCountryCode(string phoneNumber)
+        {
+            return (phoneNumber ?? string.Empty).TrimStart('+', '1');
         }
     }
 }

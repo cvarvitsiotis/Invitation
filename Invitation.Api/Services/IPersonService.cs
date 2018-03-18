@@ -6,7 +6,7 @@ namespace Invitation.Api.Services
 {
     public interface IPersonService
     {
-        Task<bool> Any();
+        Task<bool> AnyAsync();
         
         Task<List<Person>> GetPeopleAsync(string userId);
 

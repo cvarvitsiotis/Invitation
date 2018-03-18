@@ -9,15 +9,11 @@ namespace Invitation.Api.Controllers
     [Route("api/events/{eventId}/personStatuses")]
     public class PersonStatusesController : Controller
     {
-        private readonly IEverythingService _everythingService;
         private readonly IPersonStatusService _personStatusService;
 
-        public PersonStatusesController(IEverythingService everythingService, IPersonStatusService personStatusService)
+        public PersonStatusesController(IPersonStatusService personStatusService)
         {
-            _everythingService = everythingService;
             _personStatusService = personStatusService;
-
-            _everythingService.CreateEverythingIfIncompleteAsync();
         }
 
         [HttpGet("{id}", Name = "GetPersonStatus")]

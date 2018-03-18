@@ -19,8 +19,6 @@ namespace Invitation.Api.Services
 
         public async Task<Everything> GetEverythingAsync(string userId)
         {
-            await CreateEverythingIfIncompleteAsync();
-
             return new Everything
             {
                 Events = await _eventService.GetEventsAsync(userId),
@@ -30,7 +28,7 @@ namespace Invitation.Api.Services
 
         public async Task CreateEverythingIfIncompleteAsync()
         {
-            if (await _eventService.AnyAsync() && await _personService.Any())
+            if (await _eventService.AnyAsync() && await _personService.AnyAsync())
             {
                 return;
             }
