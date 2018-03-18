@@ -36,8 +36,8 @@ EventPersonListItem.propTypes = {
     status: PropTypes.string.isRequired
   }),
   person: PropTypes.shape({
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string.isRequired
+    firstName: PropTypes.string,
+    lastName: PropTypes.string
   })
 };
 

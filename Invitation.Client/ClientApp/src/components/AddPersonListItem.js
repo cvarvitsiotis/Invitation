@@ -25,8 +25,8 @@ class AddPersonListItem extends React.PureComponent {
 
 AddPersonListItem.propTypes = {
   person: PropTypes.shape({
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string.isRequired,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
     phone: PropTypes.string.isRequired
   })
 };
