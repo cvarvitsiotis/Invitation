@@ -29,12 +29,11 @@ class StateApi {
         clearInterval(googleApiInterval);
         console.log('Could not load Google API.');
       }
-      if (window.auth2) {
-        clearInterval(googleApiInterval);
-        window.gapi.signin2.render('googleSigninButton', {
-          'scope': 'profile https://www.googleapis.com/auth/contacts.readonly'
-        });
-      }
+      if (!window.gapi || !window.gapi.auth2 || !window.gapi.auth2.getAuthInstance()) return;
+      clearInterval(googleApiInterval);
+      window.gapi.signin2.render('googleSigninButton', {
+        'scope': 'profile https://www.googleapis.com/auth/contacts.readonly'
+      });
     }, 250);
   };
 
@@ -120,7 +119,6 @@ class StateApi {
 
   clearAllData = () => {
     this.data = this.getInitialData();
-    this.startGoogleApiInterval();
     this.notifySubscribers();
   };
 

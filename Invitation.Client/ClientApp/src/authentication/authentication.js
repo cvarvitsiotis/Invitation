@@ -16,7 +16,8 @@ class Authentication {
   };
 
   signInExternally = async () => {
-    return await window.auth2.grantOfflineAccess();
+    if (!window.gapi || !window.gapi.auth2 || !window.gapi.auth2.getAuthInstance()) return ({ code: null });
+    return await window.gapi.auth2.getAuthInstance().grantOfflineAccess();
   };
 
   signInInternally = async authCode => {
@@ -40,8 +41,8 @@ class Authentication {
   };
 
   signOutExternally = async () => {
-    if (!window.googleyolo) return;
-    await window.googleyolo.disableAutoSignIn();
+    if (!window.gapi || !window.gapi.auth2 || !window.gapi.auth2.getAuthInstance()) return;
+    await window.gapi.auth2.getAuthInstance().signOut();
   };
   
   signOutInternally = async () => {
