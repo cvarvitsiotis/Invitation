@@ -8,7 +8,8 @@ import { MemoryRouter } from 'react-router-dom';
 
 const mountWithRouter = node => mount(<MemoryRouter>{node}</MemoryRouter>);
 
-const store = new StateApi(data);
+const store = new StateApi();
+store.mapEventsAndPeopleAndTheirPropsIntoObjectsAndMerge(data);
 
 describe('MessageList', () => {
 

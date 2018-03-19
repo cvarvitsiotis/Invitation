@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "license": "MIT",
-  "scripts": {
-    "dev-webpack": "webpack -wd",
-    "dev-test": "jest --watchAll",
-    "prd-webpack": "webpack -p"
+  "jest": {
+    "setupTestFrameworkScriptFile": "./enzymeSetup.js"
   },
   "babel": {
     "presets": [
