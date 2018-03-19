@@ -1,5 +1,7 @@
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
@@ -22,7 +24,7 @@ namespace Invitation.Api.Services
             return new Everything
             {
                 Events = await _eventService.GetEventsAsync(userId),
-                People = await _personService.GetPeopleAsync(userId)
+                People = (await _personService.GetPeopleAsync(userId) ?? new List<Person>()).OrderBy(p => p.FirstName).ThenBy(p => p.LastName).ThenBy(p => p.PhoneType).ToList()
             };
         }
 

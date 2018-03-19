@@ -1,10 +1,11 @@
-import StoreApi from '../state-api/src/index';
+import StateApi from '../state-api/src/index';
 import { data } from '../testData';
 
-const store = new StoreApi(data);
+const store = new StateApi();
+store.mapEventsAndPeopleAndTheirPropsIntoObjectsAndMerge(data);
 
-describe('DataApi', () => {
-
+describe('StateApi', () => {
+  
   it('exposes events as an object', () => {
     const events = store.getState().events;
     const eventId = data.events['1'].id;

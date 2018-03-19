@@ -15,6 +15,7 @@ class AddPersonListItem extends React.PureComponent {
         <Link to="#" className="list-group-item list-group-item-action" onClick={() => onClick(person.id, match.params.id, history)}>
           <div className="d-flex justify-content-between">
             <div>{person.firstName} {person.lastName}</div>
+            <div>{person.phoneType}</div>
             <div>{formatPhone(person.phone)}</div>
           </div>
         </Link>
@@ -27,6 +28,7 @@ AddPersonListItem.propTypes = {
   person: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    phoneType: PropTypes.string,
     phone: PropTypes.string.isRequired
   })
 };
@@ -34,7 +36,7 @@ AddPersonListItem.propTypes = {
 function extraProps(props, store) {
   return {
     onClick: (personId, eventId, history) => {
-      store.addPerson(eventId, personId, 'not prompted');
+      store.addPerson(eventId, personId);
       history.goBack();
       return false;
     }

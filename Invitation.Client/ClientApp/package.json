@@ -3,13 +3,25 @@
   "version": "1.0.0",
   "main": "app.js",
   "license": "MIT",
+  "scripts": {
+    "dev-webpack": "webpack -wd",
+    "dev-test": "jest --watchAll",
+    "prd-webpack": "webpack -p"
+  },
+  "babel": {
+    "presets": [
+      "react",
+      "env",
+      "stage-2"
+    ]
+  },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.16.0",
     "eslint-plugin-react": "^7.6.1",
-    "jest": "^22.1.4",
+    "jest": "^22.4.2",
     "react-test-renderer": "^16.2.0"
   },
   "dependencies": {

@@ -60,7 +60,7 @@ class StateApi {
     });
     eventsAndPeople.events = this.mapIntoObject(eventsAndPeople.events);
     eventsAndPeople.people = this.mapIntoObject(eventsAndPeople.people);
-    this.mergeEventAndPeople(eventsAndPeople);
+    this.mergeEventsAndPeople(eventsAndPeople);
   }
 
   postAndGetFreshEventAndMerge = (action, data, eventId) => {
@@ -104,7 +104,7 @@ class StateApi {
     this.notifySubscribers();
   };
   
-  mergeEventAndPeople = eventsAndPeople => {
+  mergeEventsAndPeople = eventsAndPeople => {
     this.data = {
       ...this.data,
       ...eventsAndPeople
@@ -141,8 +141,8 @@ class StateApi {
     this.postAndGetFreshEventAndMerge(action, addMessage, eventId);
   };
 
-  addPerson = (eventId, personId, status) => {
-    const addPersonStatus = { personId, status };
+  addPerson = (eventId, personId) => {
+    const addPersonStatus = { personId, status: 'not prompted' };
     const action = `events/${eventId}/personStatuses`;
     this.postAndGetFreshEventAndMerge(action, addPersonStatus, eventId);
   };

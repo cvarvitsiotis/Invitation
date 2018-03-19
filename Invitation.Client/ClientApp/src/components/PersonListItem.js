@@ -11,6 +11,7 @@ class PersonListItem extends React.PureComponent {
     return (
       <div className="list-group-item d-flex justify-content-between">
         <div>{person.firstName} {person.lastName}</div>
+        <div>{person.phoneType}</div>        
         <div>{formatPhone(person.phone)}</div>
       </div>
     );
@@ -21,6 +22,7 @@ PersonListItem.propTypes = {
   person: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    phoneType: PropTypes.string,
     phone: PropTypes.string.isRequired
   })
 };

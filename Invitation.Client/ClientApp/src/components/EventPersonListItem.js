@@ -25,6 +25,7 @@ class EventPersonListItem extends React.PureComponent {
     return (
       <div className="list-group-item d-flex justify-content-between">
         <div>{person.firstName} {person.lastName}</div>
+        <div>{person.phoneType}</div>
         <div className={getStatusClass(personStatus.status)}>{personStatus.status}</div>
       </div>
     );
@@ -37,7 +38,8 @@ EventPersonListItem.propTypes = {
   }),
   person: PropTypes.shape({
     firstName: PropTypes.string,
-    lastName: PropTypes.string
+    lastName: PropTypes.string,
+    phoneType: PropTypes.string
   })
 };
 

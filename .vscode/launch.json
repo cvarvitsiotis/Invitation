@@ -42,6 +42,16 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:pickProcess}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest Tests",
+            "program": "${workspaceFolder}\\Invitation.Client\\ClientApp\\node_modules\\jest\\bin\\jest.js",
+            "cwd": "${workspaceFolder}\\Invitation.Client\\ClientApp",
+            "args": [
+                "-i"
+            ]
         }
     ]
 }
