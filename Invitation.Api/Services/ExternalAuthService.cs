@@ -1,22 +1,23 @@
+using Invitation.Api.Models;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Invitation.Api.Models;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 
 namespace Invitation.Api.Services
 {
     public class ExternalAuthService : IExternalAuthService
     {
         private const string clientId = "488214841032-85h2a7318nf181cu9mrvuh0310muup0u.apps.googleusercontent.com";
-        IHttpClientFactory _httpClientFactory;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public ExternalAuthService(IHttpClientFactory httpClientFactory)
+        public ExternalAuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
         public async Task<ExternalAccessTokenAndClaimsIdentity> GetAccessTokenAndClaimsIdentity(string authCode)
@@ -47,16 +48,15 @@ namespace Invitation.Api.Services
         private async Task<ExternalTokensResponse> GetExternalTokensAsync(string authCode)
         {
             HttpClient client = _httpClientFactory.CreateClient();
-            string clientSecret = null;
-            Dictionary<string, string> dict = new Dictionary<string, string>
+            Dictionary<string, string> data = new Dictionary<string, string>
             {
                 { "code", authCode },
                 { "client_id", clientId },
-                { "client_secret", clientSecret },
+                { "client_secret", _configuration["GoogleClientSecret"] },
                 { "redirect_uri", "postmessage" },
                 { "grant_type", "authorization_code" }
             };
-            FormUrlEncodedContent  content = new FormUrlEncodedContent(dict);
+            FormUrlEncodedContent content = new FormUrlEncodedContent(data);
             HttpResponseMessage response = await client.PostAsync("https://www.googleapis.com/oauth2/v4/token", content);
             if (!response.IsSuccessStatusCode) return null;
             string responseBody = await response.Content.ReadAsStringAsync();

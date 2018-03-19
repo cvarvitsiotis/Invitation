@@ -1,8 +1,7 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
-using Invitation.Api.Services;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Invitation.Api.Services
 {
