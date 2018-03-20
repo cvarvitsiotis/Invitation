@@ -45,10 +45,10 @@ namespace Invitation.Api.Services
                 Person oldPerson = oldPeople.FirstOrDefault(op => op.Id == CreatePersonId(newPerson.ExternalId, newPerson.Phone));
                 if (oldPerson != null)
                 {
-                    oldPerson.FirstName = newPerson.FirstName;
-                    oldPerson.LastName = newPerson.LastName;
-                    oldPerson.PhoneType = newPerson.PhoneType;
-                    oldPerson.Phone = newPerson.Phone;
+                    if (oldPerson.FirstName != newPerson.FirstName) oldPerson.FirstName = newPerson.FirstName;
+                    if (oldPerson.LastName != newPerson.LastName) oldPerson.LastName = newPerson.LastName;
+                    if (oldPerson.PhoneType != newPerson.PhoneType) oldPerson.PhoneType = newPerson.PhoneType;
+                    if (oldPerson.Phone != newPerson.Phone) oldPerson.Phone = newPerson.Phone;
                 }
                 else
                 {
