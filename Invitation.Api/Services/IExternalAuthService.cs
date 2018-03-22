@@ -5,6 +5,8 @@ namespace Invitation.Api.Services
 {
     public interface IExternalAuthService
     {
-        Task<ExternalAccessTokenAndClaimsIdentity> GetAccessTokenAndClaimsIdentity(string authCode);
+        Task<ExternalClaimsIdentity> GetExternalClaimsIdentityAsync(string idToken);
+
+        Task<string> ExchangeAuthCodeForAccessTokenAsync(string authCode);
     }
 }

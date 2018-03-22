@@ -1,4 +1,5 @@
 using Invitation.Api.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,7 @@ namespace Invitation.Api.Services
 {
     public class ExternalPersonService : IExternalPersonService
     {
-        private const string clientId = "488214841032-85h2a7318nf181cu9mrvuh0310muup0u.apps.googleusercontent.com";
-        IHttpClientFactory _httpClientFactory;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public ExternalPersonService(IHttpClientFactory httpClientFactory)
         {
@@ -63,7 +63,7 @@ namespace Invitation.Api.Services
                         FirstName = nameToUse.GivenName,
                         LastName = nameToUse.FamilyName,
                         PhoneType = phoneNumber.FormattedType,
-                        Phone = GetWithoutUsCountryCode(phoneNumber.CanonicalForm)
+                        Phone = RemoveUsCountryCode(phoneNumber.CanonicalForm)
                     };
                     people.Add(person);
                 }
@@ -72,7 +72,7 @@ namespace Invitation.Api.Services
             return people;
         }
 
-        private string GetWithoutUsCountryCode(string phoneNumber)
+        private string RemoveUsCountryCode(string phoneNumber)
         {
             return (phoneNumber ?? string.Empty).TrimStart('+', '1');
         }

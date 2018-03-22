@@ -22,42 +22,34 @@ namespace Invitation.Api.Controllers
         private readonly IExternalPersonService _externalPersonService;
         private readonly IPersonService _personService;
         private readonly IAntiforgery _antiforgery;
+        private readonly IGoogleApiAccessTokenService _googleApiAccessTokenService;
 
-        public AuthController(IExternalAuthService externalAuthService, IExternalPersonService externalPersonService, IPersonService personService, IAntiforgery antiforgery)
+        public AuthController(IExternalAuthService externalAuthService, IExternalPersonService externalPersonService, IPersonService personService, IAntiforgery antiforgery, IGoogleApiAccessTokenService googleApiAccessTokenService)
         {
             _externalAuthService = externalAuthService;
             _externalPersonService = externalPersonService;
             _personService = personService;
             _antiforgery = antiforgery;
+            _googleApiAccessTokenService = googleApiAccessTokenService;
         }
 
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        [HttpGet("signIn/{authCode}")]
-        public async Task<IActionResult> SignIn(string authCode)
+        [HttpGet("signIn/{idToken}")]
+        public async Task<IActionResult> SignIn(string idToken)
         {
-            ExternalAccessTokenAndClaimsIdentity accessTokenAndClaimsIdentity = await _externalAuthService.GetAccessTokenAndClaimsIdentity(WebUtility.UrlDecode(authCode));
-
-            if (accessTokenAndClaimsIdentity?.ExternalClaimsIdentity?.Sub == null) return BadRequest();
+            ExternalClaimsIdentity externalClaimsIdentity = await _externalAuthService.GetExternalClaimsIdentityAsync(WebUtility.UrlDecode(idToken));
+            
+            if (externalClaimsIdentity?.Sub == null) return BadRequest();
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, accessTokenAndClaimsIdentity.ExternalClaimsIdentity.Sub)
+                new Claim(ClaimTypes.Name, externalClaimsIdentity.Sub)
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-            if (!string.IsNullOrEmpty(accessTokenAndClaimsIdentity.AccessToken))
-            {
-                List<Person> people = await _externalPersonService.GetPeopleAsync(accessTokenAndClaimsIdentity.AccessToken);
-
-                if ((people?.Any()).GetValueOrDefault())
-                {
-                    await _personService.UpsertPeopleAsync(accessTokenAndClaimsIdentity.ExternalClaimsIdentity.Sub, people);
-                }
-            }
-
-            return Ok(new { UserIsAuthenticated = true, UserPicture = accessTokenAndClaimsIdentity.ExternalClaimsIdentity.Picture });
+            
+            return Ok(new { UserIsAuthenticated = true, UserPicture = externalClaimsIdentity.Picture });
         }
 
         [IgnoreAntiforgeryToken]
@@ -69,6 +61,44 @@ namespace Invitation.Api.Controllers
             //Cookie name must match axios's xsrfCookieName
             HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
 
+            return Ok();
+        }
+
+        [HttpGet("wasPreviouslyAuthorized")]
+        public async Task<IActionResult> WasPreviouslyAuthorized()
+        {
+            string accessToken = (await _googleApiAccessTokenService.GetAccessTokenAsync(User.Identity.Name))?.AccessToken;
+            
+            bool wasPreviouslyAuthorized = !string.IsNullOrEmpty(accessToken);
+            
+            return Ok(wasPreviouslyAuthorized);
+        }
+
+        [HttpGet("exchangeAuthCodeForAccessToken/{authCode}")]
+        public async Task<IActionResult> ExchangeAuthCodeForAccessToken(string authCode)
+        {
+            string accessToken = await _externalAuthService.ExchangeAuthCodeForAccessTokenAsync(WebUtility.UrlDecode(authCode));
+            
+            if (string.IsNullOrEmpty(accessToken)) return Ok(false);
+            
+            await _googleApiAccessTokenService.SaveAccessTokenAsync(User.Identity.Name, accessToken);
+            
+            return Ok(true);
+        }
+
+        [HttpGet("refreshPeople")]
+        public async Task<IActionResult> RefreshPeople()
+        {
+            string accessToken = (await _googleApiAccessTokenService.GetAccessTokenAsync(User.Identity.Name))?.AccessToken;
+            if (string.IsNullOrEmpty(accessToken)) return BadRequest();
+        
+            List<Person> people = await _externalPersonService.GetPeopleAsync(accessToken);
+
+            if ((people?.Any()).GetValueOrDefault())
+            {
+                await _personService.UpsertPeopleAsync(User.Identity.Name, people);
+            }
+          
             return Ok();
         }
 

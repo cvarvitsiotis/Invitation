@@ -4,7 +4,7 @@ import { Route, Link, NavLink } from 'react-router-dom';
 
 class Navbar extends React.PureComponent {
   render() {
-    const { userIsAuthenticated, userPicture, signOut } = this.props;
+    const { user, signOut } = this.props;
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <Link to="/" className="navbar-brand">
@@ -16,15 +16,15 @@ class Navbar extends React.PureComponent {
             <NavLink to="/people" className="nav-item nav-link" activeClassName="active">People</NavLink>
           </div>
           <div>
-            {userIsAuthenticated &&
+            {user.isAuthenticated &&
               <Route render={() => (
                 <div className="navbar-nav d-inline-block">
                   <Link to="#" className="nav-item nav-link" onClick={signOut}>Log out</Link>
                 </div>
               )}/>
             }
-            {userPicture &&
-              <img src={userPicture} width="40" height="40" className="rounded d-inline-block align-top" alt="User Picture" />
+            {user.picture &&
+              <img src={user.picture} width="40" height="40" className="rounded d-inline-block align-top" alt="User Picture" />
             }
           </div>
         </div>
@@ -38,8 +38,7 @@ class Navbar extends React.PureComponent {
 
 function extraProps(props, store) {
   return {
-    userIsAuthenticated: store.getState().userIsAuthenticated,
-    userPicture: store.getState().userPicture,
+    user: store.getState().user,
     signOut: () => {
       store.signOut();
       return false;

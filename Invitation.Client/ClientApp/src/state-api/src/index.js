@@ -10,8 +10,11 @@ class StateApi {
   getInitialData = () => ({
     events: {},
     people: {},
-    userIsAuthenticated: false,
-    userPicture: null
+    user: {
+      isAuthenticated: false,
+      hasAuthorized: false,
+      picture: null
+    }
   });
   
   subscriptions = {};  
@@ -20,21 +23,6 @@ class StateApi {
   
   getState = () => {
     return this.data;
-  };
-
-  renderGoogleSignInButton = () => {
-    var timesCheckedIfGoogleIsLoaded = 0;
-    var googleApiInterval = setInterval(() => {
-      if (++timesCheckedIfGoogleIsLoaded > 100) {
-        clearInterval(googleApiInterval);
-        console.log('Could not load Google API.');
-      }
-      if (!window.gapi || !window.gapi.auth2 || !window.gapi.auth2.getAuthInstance()) return;
-      clearInterval(googleApiInterval);
-      window.gapi.signin2.render('googleSigninButton', {
-        'scope': 'profile https://www.googleapis.com/auth/contacts.readonly'
-      });
-    }, 250);
   };
 
   lookupPerson = personId => {
@@ -111,9 +99,12 @@ class StateApi {
     this.notifySubscribers();
   };
 
-  mergeUser = (userIsAuthenticated, userPicture) => { 
-    this.data.userIsAuthenticated = userIsAuthenticated;
-    this.data.userPicture = userPicture;
+  mergeUser = (isAuthenticated, hasAuthorized, picture) => {
+    this.data.user = {
+      isAuthenticated: isAuthenticated,
+      hasAuthorized: hasAuthorized,
+      picture: picture
+    };
     this.notifySubscribers();
   };
 
@@ -154,20 +145,27 @@ class StateApi {
     }
   };
 
+  initializeGoogleApiAndRenderSignInButton = () => {
+    this.authentication.initializeGoogleApiAndRenderSignInButton();
+  }
+
   signIn = () => {
     this.authentication.signIn()
-      .then(result => {
-        if (!result.userIsAuthenticated) return;
-        this.mergeUser(result.userIsAuthenticated, result.userPicture);
-        this.getEventsAndPeople()
-          .then(() => {
-          })
-          .catch(error => {
-            console.log(error);
+      .then(signInResult => {
+        if (signInResult.error) {
+          alert(signInResult.error);
+          return;
+        }
+        this.mergeUser(true, false, signInResult.userPicture);
+        this.authentication.refreshPeople()
+          .then(refreshPeopleResult => {
+            if (refreshPeopleResult === 'Success') {
+              this.mergeUser(true, true, signInResult.userPicture);
+              this.getEventsAndPeople().then(() => {});
+            } else {
+              alert(refreshPeopleResult);             
+            }
           });
-      })
-      .catch(error => {
-        console.log(error);
       });
   };
 

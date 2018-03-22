@@ -5,15 +5,15 @@ import '../styles/signInButton.css';
 class Home extends React.PureComponent {
 
   componentDidMount() {
-    this.props.renderGoogleSignInButton();
+    this.props.initializeGoogleApiAndRenderSignInButton();
   }
 
   render() {
-    const { userIsAuthenticated, signIn } = this.props;
+    const { user, signIn } = this.props;
     return (
       <div className="text-center">
         <h3 className="text-primary font-weight-light">Let&#39;s get started!</h3>
-        {!userIsAuthenticated &&
+        {!user.isAuthenticated &&
           <div className="mt-4" id="googleSigninButton" onClick={signIn}></div>
         }
       </div>
@@ -23,9 +23,9 @@ class Home extends React.PureComponent {
 
 function extraProps(props, store) {
   return {
-    userIsAuthenticated: store.getState().userIsAuthenticated,
-    renderGoogleSignInButton: () => {
-      store.renderGoogleSignInButton();
+    user: store.getState().user,
+    initializeGoogleApiAndRenderSignInButton: () => {
+      store.initializeGoogleApiAndRenderSignInButton();
     },
     signIn: () => {
       store.signIn();
