@@ -16,15 +16,18 @@ class Navbar extends React.PureComponent {
             <NavLink to="/people" className="nav-item nav-link" activeClassName="active">People</NavLink>
           </div>
           <div>
-            {user.isAuthenticated &&
+            {user.name &&
+              <span className="navbar-text pr-2">Hi, {user.name}!</span> 
+            }
+            {user.picture &&
+              <img src={user.picture} width="40" height="40" className="rounded d-inline-block align-top" alt="User Picture" />
+            }
+            {user.isSignedIn &&
               <Route render={() => (
                 <div className="navbar-nav d-inline-block">
                   <Link to="#" className="nav-item nav-link" onClick={signOut}>Log out</Link>
                 </div>
               )}/>
-            }
-            {user.picture &&
-              <img src={user.picture} width="40" height="40" className="rounded d-inline-block align-top" alt="User Picture" />
             }
           </div>
         </div>

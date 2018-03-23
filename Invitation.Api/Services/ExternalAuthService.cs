@@ -19,12 +19,12 @@ namespace Invitation.Api.Services
             _configuration = configuration;
         }
 
-        public async Task<ExternalClaimsIdentity> GetExternalClaimsIdentityAsync(string idToken)
+        public async Task<ExternalClaimsIdentity> GetExternalClaimsIdentityAsync(string accessToken)
         {
             try
             {
                 HttpClient client = _httpClientFactory.CreateClient();
-                string uri = $"https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={idToken}";
+                string uri = $"https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={accessToken}";
                 string responseBody = await client.GetStringAsync(uri);
                 ExternalClaimsIdentity claimsIdentity = JsonConvert.DeserializeObject<ExternalClaimsIdentity>(responseBody);
                 if (claimsIdentity.Aud != _configuration["GoogleClientId"]) return null;
@@ -34,25 +34,6 @@ namespace Invitation.Api.Services
             {
                 return null;
             }
-        }
-
-        public async Task<string> ExchangeAuthCodeForAccessTokenAsync(string authCode)
-        {
-            HttpClient client = _httpClientFactory.CreateClient();
-            Dictionary<string, string> data = new Dictionary<string, string>
-            {
-                { "code", authCode },
-                { "client_id", _configuration["GoogleClientId"] },
-                { "client_secret", _configuration["GoogleClientSecret"] },
-                { "redirect_uri", "postmessage" },
-                { "grant_type", "authorization_code" }
-            };
-            FormUrlEncodedContent content = new FormUrlEncodedContent(data);
-            HttpResponseMessage response = await client.PostAsync("https://www.googleapis.com/oauth2/v4/token", content);
-            if (!response.IsSuccessStatusCode) return null;
-            string responseBody = await response.Content.ReadAsStringAsync();
-            ExternalTokensResponse tokensResponse = JsonConvert.DeserializeObject<ExternalTokensResponse>(responseBody);
-            return tokensResponse?.AccessToken;
         }
     }
 }

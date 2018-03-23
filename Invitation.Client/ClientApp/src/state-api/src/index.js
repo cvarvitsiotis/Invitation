@@ -11,8 +11,9 @@ class StateApi {
     events: {},
     people: {},
     user: {
-      isAuthenticated: false,
-      hasAuthorized: false,
+      isSignedIn: false,
+      signInError: null,
+      name: null,
       picture: null
     }
   });
@@ -55,11 +56,11 @@ class StateApi {
       .then(() => {
         return axios.get(`https://localhost:44381/api/events/${eventId}`, { withCredentials: true });
       })
-      .then(resp => {
-        this.mapEventPropsIntoObjectsAndMerge(resp.data);
+      .then(result => {
+        this.mapEventPropsIntoObjectsAndMerge(result.data);
       })
       .catch(error => {
-        console.log(error);
+        alert(`Unable to postAndGetFreshEventAndMerge due to... ${error.message}`);
       });
   };
 
@@ -99,10 +100,11 @@ class StateApi {
     this.notifySubscribers();
   };
 
-  mergeUser = (isAuthenticated, hasAuthorized, picture) => {
+  mergeUser = (isSignedIn, signInError, name, picture) => {
     this.data.user = {
-      isAuthenticated: isAuthenticated,
-      hasAuthorized: hasAuthorized,
+      isSignedIn: isSignedIn,
+      signInError: signInError,
+      name: name,
       picture: picture
     };
     this.notifySubscribers();
@@ -116,11 +118,11 @@ class StateApi {
   addEvent = (description, date) => {
     const addEvent = { description, date: date.toJSON() };
     axios.post('https://localhost:44381/api/events', addEvent, { withCredentials: true })
-      .then(resp => {
-        this.mapEventPropsIntoObjectsAndMerge(resp.data);
+      .then(result => {
+        this.mapEventPropsIntoObjectsAndMerge(result.data);
       })
       .catch(error => {
-        console.log(error);
+        alert(`Unable to addEvent due to... ${error.message}`);
       });
   };
 
@@ -138,42 +140,46 @@ class StateApi {
 
   getEventsAndPeople = async () => {
     try {
-      const response = await axios.get('https://localhost:44381/api/everything', { withCredentials: true });
-      this.mapEventsAndPeopleAndTheirPropsIntoObjectsAndMerge(response.data);
+      const result = await axios.get('https://localhost:44381/api/everything', { withCredentials: true });
+      this.mapEventsAndPeopleAndTheirPropsIntoObjectsAndMerge(result.data);
     } catch(error) {
-      console.log(error);
+      alert(`Unable to getEventsAndPeople due to... ${error.message}`);
     }
   };
 
   initializeGoogleApiAndRenderSignInButton = () => {
-    this.authentication.initializeGoogleApiAndRenderSignInButton();
+    this.authentication.loadGoogleApi()
+      .then(() => {
+        this.authentication.initializeGoogleApiAndRenderSignInButton(this.signIn)
+          .then(result => {
+            if (result != 'Success') this.mergeUser(false, result, null, null);
+          });
+      })
+      .catch(error => this.mergeUser(false, error.message, null, null));
   }
 
-  signIn = () => {
-    this.authentication.signIn()
+  signIn = googleUser => {
+    this.mergeUser(false, null, null, null);
+    this.authentication.signIn(googleUser)
       .then(signInResult => {
-        if (signInResult.error) {
-          alert(signInResult.error);
+        if (!signInResult.isSignedIn) {
+          this.authentication.signOutOfGoogle();
+          this.mergeUser(false, signInResult.error, null, null);
           return;
         }
-        this.mergeUser(true, false, signInResult.userPicture);
-        this.authentication.refreshPeople()
-          .then(refreshPeopleResult => {
-            if (refreshPeopleResult === 'Success') {
-              this.mergeUser(true, true, signInResult.userPicture);
-              this.getEventsAndPeople().then(() => {});
-            } else {
-              alert(refreshPeopleResult);             
-            }
-          });
+        this.mergeUser(true, null, signInResult.name, signInResult.picture);
+        this.getEventsAndPeople()
+          .then(() => {});
       });
   };
 
   signOut = () => {
     this.authentication.signOut()
       .then(result => {
-        if (result) {
+        if (result === 'Success') {
           this.clearAllData();
+        } else {
+          alert(`Unable to sign out due to... ${result}`);
         }
       });
   };

@@ -13,8 +13,11 @@ class Home extends React.PureComponent {
     return (
       <div className="text-center">
         <h3 className="text-primary font-weight-light">Let&#39;s get started!</h3>
-        {!user.isAuthenticated &&
-          <div className="mt-4" id="googleSigninButton" onClick={signIn}></div>
+        {!user.isSignedIn &&
+          <div>
+            <div className="mt-4" id="googleSigninButton"></div>
+            <div className="mt-4">{user.signInError}</div>
+          </div>
         }
       </div>
     );

@@ -1,40 +1,46 @@
 import axios from 'axios';
 
 class Authentication {
-  
-  initializeGoogleApiAndRenderSignInButton =  () => {    
-    var timesCheckedIfGoogleApiIsReady = 0;
-    var googleApiIsReadyInterval = setInterval(() => {
-      if (++timesCheckedIfGoogleApiIsReady > 100) {
-        clearInterval(googleApiIsReadyInterval);
-        console.log('Google API never became ready.');
-      }
-      if (!this.isGoogleApiReady()) return;
-      clearInterval(googleApiIsReadyInterval);
-      this.initializeGoogleApiAndRenderSignInButtonInternal();
-    }, 250);
+
+  loadGoogleApi = () => {    
+    var timesCheckedIfGoogleApiIsLoaded = 0;
+    return new Promise((resolve, reject) => {
+      var loadGoogleApiInterval = setInterval(() => {
+        if (++timesCheckedIfGoogleApiIsLoaded > 100) {
+          clearInterval(loadGoogleApiInterval);
+          reject('Unable to load Google API');
+        }
+        if (!this.isGoogleApiLoaded()) return;
+        clearInterval(loadGoogleApiInterval);
+        resolve('Success');
+      }, 250);
+    });
   };
 
-  isGoogleApiReady = () => {
+  isGoogleApiLoaded = () => {
     return window.gapi && window.gapi.auth2;
   };
 
-  initializeGoogleApiAndRenderSignInButtonInternal = () => {
-    this.initializeGoogleApi()
-      .then(() => {
-        this.signOutOfGoogleIfSignedIn()
-          .then(() => {
-            this.renderSignInButton();
-          });
-      });
+  initializeGoogleApiAndRenderSignInButton = async signInCallback => {
+    try {
+      await this.initializeGoogleApi();
+      if (!this.isGoogleApiInitialized()) return 'Unable to initialize Google API';
+      await this.signOutOfGoogleIfSignedIn();
+      this.renderSigninButton(signInCallback);
+    } catch(error) {
+      return error.message;
+    }
   };
 
   initializeGoogleApi = async () => {
     await window.gapi.auth2.init({
       client_id: '488214841032-85h2a7318nf181cu9mrvuh0310muup0u.apps.googleusercontent.com',
-      fetch_basic_profile: false,
-      scope: 'profile'
+      scope: 'profile https://www.googleapis.com/auth/contacts.readonly'
     });
+  };
+
+  isGoogleApiInitialized = () => {
+    return window.gapi.auth2.getAuthInstance();
   };
 
   signOutOfGoogleIfSignedIn = async () => {
@@ -43,94 +49,46 @@ class Authentication {
     }
   };
 
-  renderSignInButton = () => {
-    window.gapi.signin2.render('googleSigninButton');
+  renderSigninButton = signInCallback => {
+    window.gapi.signin2.render('googleSigninButton', {
+      'onSuccess': signInCallback
+    });
   };
 
-  signIn = async () => {
+  signIn = async googleUser => {
     try {
-      const idToken = await this.signInExternally();
-      if (!idToken) return ({ error: 'External signin failed', userPicture: null });
-
-      const internalSignInResponse = await this.signInInternally(idToken);
-      if (!internalSignInResponse.userIsAuthenticated) return ({ error: 'Internal signin failed', userPicture: null });
-
+      const profile = googleUser.getBasicProfile();
+      const name = profile.getGivenName();
+      const picture = profile.getImageUrl();
+      const accessToken = googleUser.getAuthResponse().access_token;
+      if (!accessToken) return ({ isSignedIn: false, error: 'Unable to obtain Google access token' });
+      await this.signInInternally(accessToken);
       await this.getAntiForgeryTokens();
+      return { isSignedIn: true, name, picture };
     } catch(error) {
-      console.log(error);
-      return ({ error: error, userPicture: null });
+      return { isSignedIn: false, error: error.message };
     }
   };
 
-  signInExternally = async () => {
-    const user = await window.gapi.auth2.getAuthInstance().signIn();
-    return user.getAuthResponse(false).id_token;
-  };
-
-  signInInternally = async idToken => {
-    const resp = await axios.get(`https://localhost:44381/api/auth/signIn/${encodeURIComponent(idToken)}`, { withCredentials: true });
-    return ({ userIsAuthenticated: resp.data.userIsAuthenticated, userPicture: resp.data.userPicture });
+  signInInternally = async accessToken => {
+    await axios.get(`https://localhost:44381/api/auth/signIn/${encodeURIComponent(accessToken)}`, { withCredentials: true });
   };
 
   getAntiForgeryTokens = async () => {
     await axios.get('https://localhost:44381/api/auth/getAntiForgeryTokens', { withCredentials: true });
   };
 
-  refreshPeople = async () => {
-    try {
-      const wasPreviouslyAuthorized = await this.wasPreviouslyAuthorized();
-      if (!wasPreviouslyAuthorized) {
-        const authorizationResult = await this.authorize();
-        if (authorizationResult != 'Success') return authorizationResult;
-      }
-      await this.refreshPeopleInternal();
-      return 'Success';
-    } catch(error) {
-      return error;
-    }
-  };
-
-  wasPreviouslyAuthorized = async () => {
-    const resp = await axios.get('https://localhost:44381/api/auth/wasPreviouslyAuthorized', { withCredentials: true });
-    return resp.data;
-  };
-
-  authorize = async () => {
-    const authCode = await this.requestAuthorization();
-    if (!authCode) return 'Unable to obtain auth code';
-    const wasExchanged = await this.exchangeAuthCodeForAccessToken(authCode);
-    return wasExchanged ? 'Success' : 'Unable to exchange auth code for access token';
-  };
-
-  requestAuthorization = async () => {
-    const user = await window.gapi.auth2.getAuthInstance().currentUser.get().grant({
-      'scope': 'https://www.googleapis.com/auth/contacts.readonly'
-    });
-    return user.getAuthResponse(true).code;
-  };
-
-  exchangeAuthCodeForAccessToken = async authCode => {
-    const resp = await axios.get(`https://localhost:44381/api/auth/exchangeAuthCodeForAccessToken/${encodeURIComponent(authCode)}`, { withCredentials: true });
-    return resp.data;
-  };
-  
-  refreshPeopleInternal = async () => {
-    const resp = await axios.get('https://localhost:44381/api/auth/refreshPeople', { withCredentials: true });
-    return resp.data;
-  };
-
   signOut = async () => {
     try {
-      await this.signOutExternally();
+      await this.signOutOfGoogle();
       await this.signOutInternally();
-      return true;
+      return 'Success';
     } catch(error) {
-      console.log(error);
-      return false;
+      return error.message;
     }
   };
 
-  signOutExternally = async () => {
+  signOutOfGoogle = async () => {
     await window.gapi.auth2.getAuthInstance().signOut();
   };
   

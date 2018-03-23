@@ -7,7 +7,7 @@ class PrivateRoute extends React.PureComponent {
     const { component: Component, user, ...rest } = this.props;
     return (
       <Route {...rest} render={props =>
-        (user.isAuthenticated && user.hasAuthorized) ? <Component {...props} /> : <Redirect to='/' />
+        user.isSignedIn ? <Component {...props} /> : <Redirect to='/' />
       }/>
     );
   }

@@ -54,7 +54,6 @@ namespace Invitation.Api
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IPersonStatusService, PersonStatusService>();
             services.AddScoped<IPersonService, PersonService>();
-            services.AddScoped<IGoogleApiAccessTokenService, GoogleApiAccessTokenService>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
