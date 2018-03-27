@@ -31,6 +31,11 @@ namespace Invitation.Api.Services
             return (await GetPeopleAsync(userId))?.FirstOrDefault(p => p.Id == id);
         }
 
+        public async Task<List<Person>> GetPeopleAsync(string userId, List<string> ids)
+        {
+            return (await GetPeopleAsync(userId))?.Where(p => ids.Contains(p.Id)).ToList();
+        }
+
         public async Task UpsertPeopleAsync(string userId, List<Person> newPeople)
         {
             IEnumerable<Person> dedupedNewPeople = newPeople.GroupBy(

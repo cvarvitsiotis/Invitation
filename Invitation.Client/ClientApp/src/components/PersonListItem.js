@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const formatPhone = phone => {
-  return `(${phone.substr(0, 3)}) ${phone.substr(3, 3)}-${phone.substr(6)}`;
+  return `(${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8)}`;
 };
 
 class PersonListItem extends React.PureComponent {

@@ -1,5 +1,7 @@
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,11 +11,15 @@ namespace Invitation.Api.Services
     {
         private readonly ApiContext _apiContext;
         private readonly IEventService _eventService;
-        
-        public MessageService(ApiContext apiContext, IEventService eventService)
+        private readonly IPersonStatusService _personStatusService;
+        private readonly IExternalMessageService _externalMessageService;
+
+        public MessageService(ApiContext apiContext, IEventService eventService, IPersonStatusService personStatusService, IExternalMessageService externalMessageService)
         {
             _apiContext = apiContext;
             _eventService = eventService;
+            _personStatusService = personStatusService;
+            _externalMessageService = externalMessageService;
         }
 
         public async Task<Message> AddMessageAsync(string userId, string eventId, AddMessage addMessage)
@@ -31,7 +37,24 @@ namespace Invitation.Api.Services
 
             @event.Messages.Add(message);
             await _apiContext.SaveChangesAsync();
+
+            //ConfigureAwait(false) prevents code from continuing on this context after task completes.
+            //We want to set (actually, send) and forget.
+            await SendExternalMessageAsync(userId, eventId, addMessage.Content).ConfigureAwait(false);
+
             return message;
+        }
+
+        private async Task SendExternalMessageAsync(string userId, string eventId, string message)
+        {
+            try
+            {
+                List<Person> people = await _personStatusService.GetPeopleToSendMessageToAsync(userId, eventId);
+                await _externalMessageService.SendAsync(people, message);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         public async Task<Message> GetMessageAsync(string userId, string eventId, string id)

@@ -63,18 +63,13 @@ namespace Invitation.Api.Services
                         FirstName = nameToUse.GivenName,
                         LastName = nameToUse.FamilyName,
                         PhoneType = phoneNumber.FormattedType,
-                        Phone = RemoveUsCountryCode(phoneNumber.CanonicalForm)
+                        Phone = phoneNumber.CanonicalForm
                     };
                     people.Add(person);
                 }
             }
             
             return people;
-        }
-
-        private string RemoveUsCountryCode(string phoneNumber)
-        {
-            return (phoneNumber ?? string.Empty).TrimStart('+', '1');
         }
     }
 }

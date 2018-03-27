@@ -12,6 +12,8 @@ namespace Invitation.Api.Services
 
         Task<Person> GetPersonAsync(string userId, string id);
 
+        Task<List<Person>> GetPeopleAsync(string userId, List<string> ids);
+        
         Task UpsertPeopleAsync(string userId, List<Person> newPeople);
     }
 }

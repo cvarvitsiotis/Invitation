@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>b94ac380-3800-440e-8fb6-2f16a509d99e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Twilio" Version="5.10.0" />
   </ItemGroup>
 
   <ItemGroup>

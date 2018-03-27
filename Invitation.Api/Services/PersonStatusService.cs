@@ -1,5 +1,6 @@
 using Invitation.Api.DataAccess;
 using Invitation.Api.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +24,12 @@ namespace Invitation.Api.Services
             return (await _eventService.GetEventAsync(userId, eventId))?.PersonStatuses?.FirstOrDefault(s => s.Id == id);
         }
 
+        public async Task<List<Person>> GetPeopleToSendMessageToAsync(string userId, string eventId)
+        {
+            List<string> personIds = (await _eventService.GetEventAsync(userId, eventId))?.PersonStatuses?.Where(s => s.Status != Status.No).Select(s => s.PersonId).ToList();
+            return await _personService.GetPeopleAsync(userId, personIds);
+        }
+
         public async Task<PersonStatus> AddPersonStatusAsync(string userId, string eventId, AddPersonStatus addPersonStatus)
         {
             Person person = await _personService.GetPersonAsync(userId, addPersonStatus.PersonId);
@@ -42,6 +49,11 @@ namespace Invitation.Api.Services
             @event.PersonStatuses.Add(personStatus);
             await _apiContext.SaveChangesAsync();
             return personStatus;
+        }
+
+        public async Task UpdatePersonStatusAsync(string phone, string status)
+        {
+
         }
     }
 }

@@ -4,7 +4,7 @@ import { Route, Link } from 'react-router-dom';
 import storeProvider from './storeProvider';
 
 const formatPhone = phone => {
-  return `(${phone.substr(0, 3)}) ${phone.substr(3, 3)}-${phone.substr(6)}`;
+  return `(${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8)}`;
 };
 
 class AddPersonListItem extends React.PureComponent {

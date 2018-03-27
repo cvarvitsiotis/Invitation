@@ -1,6 +1,6 @@
 namespace Invitation.Api.Models
 {
-    public class Statuses
+    public class Status
     {
         public const string Yes = "yes";
         public const string No = "no";
