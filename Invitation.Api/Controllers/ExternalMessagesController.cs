@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using Invitation.Api.Filters;
 using Invitation.Api.Models;
 using Invitation.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Twilio.TwiML;
 
@@ -8,6 +10,7 @@ namespace Invitation.Api.Controllers
 {
     [ApiController]
     [Route("api/externalMessages")]
+    [ValidateExternalRequest]
     public class ExternalMessagescontroller : Controller
     {
         private readonly IPersonStatusService _personStatusService;
@@ -17,10 +20,14 @@ namespace Invitation.Api.Controllers
             _personStatusService = personStatusService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(string phone, string status)
+        [HttpGet]
+        [AllowAnonymous]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> Index(string from, string body)
         {
-            await _personStatusService.UpdatePersonStatusAsync(phone, status);
+            string statusAbbreviation = body.Substring(0, 1);
+            string personStatusId = body.Substring(1);
+            await _personStatusService.UpdatePersonStatusFromMessageResponseAsync(personStatusId, statusAbbreviation, from);
             
             return Ok();
         }

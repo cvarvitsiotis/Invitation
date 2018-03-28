@@ -24,10 +24,19 @@ namespace Invitation.Api.Services
             return (await _eventService.GetEventAsync(userId, eventId))?.PersonStatuses?.FirstOrDefault(s => s.Id == id);
         }
 
-        public async Task<List<Person>> GetPeopleToSendMessageToAsync(string userId, string eventId)
+        public async Task<List<PersonStatusMessage>> GetPeopleToSendMessageToAsync(string userId, string eventId)
         {
-            List<string> personIds = (await _eventService.GetEventAsync(userId, eventId))?.PersonStatuses?.Where(s => s.Status != Status.No).Select(s => s.PersonId).ToList();
-            return await _personService.GetPeopleAsync(userId, personIds);
+            IEnumerable<PersonStatus> personStatuses = (await _eventService.GetEventAsync(userId, eventId))?.PersonStatuses?.Where(s => s.Status != Status.No);
+            
+            List<Task<PersonStatusMessage>> personStatusMessagesTasks = personStatuses.Select(async personStatus =>
+                new PersonStatusMessage
+                {
+                    PersonStatus = personStatus,
+                    Person = await _personService.GetPersonAsync(userId, personStatus.PersonId)
+                }
+            ).ToList();
+
+            return (await Task.WhenAll(personStatusMessagesTasks)).ToList();
         }
 
         public async Task<PersonStatus> AddPersonStatusAsync(string userId, string eventId, AddPersonStatus addPersonStatus)
@@ -51,9 +60,27 @@ namespace Invitation.Api.Services
             return personStatus;
         }
 
-        public async Task UpdatePersonStatusAsync(string phone, string status)
+        public async Task UpdatePersonStatusToNoResponseAsync(string userId, string eventId)
         {
+            (await _eventService.GetEventAsync(userId, eventId))?.PersonStatuses?.ToList().ForEach(personStatus =>
+            {
+                if (personStatus.Status == Status.NotPrompted) personStatus.Status = Status.NoResponse;
+            });
 
+            await _apiContext.SaveChangesAsync();
+        }
+
+        public async Task UpdatePersonStatusFromMessageResponseAsync(string personStatusId, string statusAbbreviation, string phone)
+        {
+            PersonStatus personStatus = (await _eventService.GetEveryonesEventsAsync()).SelectMany(e => e.PersonStatuses).FirstOrDefault(s => s.Id == personStatusId);
+            
+            Person person = await _personService.GetPersonAsync(personStatus.PersonId);
+
+            if (person.Phone != phone) return;
+
+            personStatus.Status = Status.GetStatusFromAbbreviation(statusAbbreviation);
+            
+            await _apiContext.SaveChangesAsync();
         }
     }
 }

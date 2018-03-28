@@ -31,9 +31,9 @@ namespace Invitation.Api.Services
             return (await GetPeopleAsync(userId))?.FirstOrDefault(p => p.Id == id);
         }
 
-        public async Task<List<Person>> GetPeopleAsync(string userId, List<string> ids)
+        public async Task<Person> GetPersonAsync(string id)
         {
-            return (await GetPeopleAsync(userId))?.Where(p => ids.Contains(p.Id)).ToList();
+            return (await _apiContext.People.Where(p => p.Id == id).ToListAsync())?.FirstOrDefault();
         }
 
         public async Task UpsertPeopleAsync(string userId, List<Person> newPeople)

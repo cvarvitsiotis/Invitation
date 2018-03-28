@@ -8,10 +8,12 @@ namespace Invitation.Api.Services
     {
         Task<PersonStatus> GetPersonStatusAsync(string userId, string eventId, string id);
 
-        Task<List<Person>> GetPeopleToSendMessageToAsync(string userId, string eventId);
+        Task<List<PersonStatusMessage>> GetPeopleToSendMessageToAsync(string userId, string eventId);
 
         Task<PersonStatus> AddPersonStatusAsync(string userId, string eventId, AddPersonStatus addPersonStatus);
 
-        Task UpdatePersonStatusAsync(string phone, string status);
+        Task UpdatePersonStatusToNoResponseAsync(string userId, string eventId);
+
+        Task UpdatePersonStatusFromMessageResponseAsync(string personStatusId, string statusAbbreviation, string phone);
     }
 }

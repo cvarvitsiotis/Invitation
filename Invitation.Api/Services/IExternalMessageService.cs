@@ -6,6 +6,6 @@ namespace Invitation.Api.Services
 {
     public interface IExternalMessageService
     {
-        Task SendAsync(List<Person> people, string message);
+        Task SendAsync(List<PersonStatusMessage> personStatusMessages);
     }
 }

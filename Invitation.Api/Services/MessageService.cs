@@ -42,24 +42,38 @@ namespace Invitation.Api.Services
             //We want to set (actually, send) and forget.
             await SendExternalMessageAsync(userId, eventId, addMessage.Content).ConfigureAwait(false);
 
+            await _personStatusService.UpdatePersonStatusToNoResponseAsync(userId, eventId);
+
             return message;
+        }
+
+        public async Task<Message> GetMessageAsync(string userId, string eventId, string id)
+        {
+            return (await _eventService.GetEventAsync(userId, eventId))?.Messages?.FirstOrDefault(m => m.Id == id);
         }
 
         private async Task SendExternalMessageAsync(string userId, string eventId, string message)
         {
             try
             {
-                List<Person> people = await _personStatusService.GetPeopleToSendMessageToAsync(userId, eventId);
-                await _externalMessageService.SendAsync(people, message);
+                List<PersonStatusMessage> personStatusMessages = await _personStatusService.GetPeopleToSendMessageToAsync(userId, eventId);
+                bool isFirstMessage = (await _eventService.GetEventAsync(userId, eventId)).Messages.Count() == 1;
+                personStatusMessages.ForEach(personStatusMessage => personStatusMessage.Message = GetMessagePossiblyWithRsvpInstruction(message, personStatusMessage.PersonStatus.Id, isFirstMessage));
+                await _externalMessageService.SendAsync(personStatusMessages);
             }
             catch (Exception)
             {
             }
         }
 
-        public async Task<Message> GetMessageAsync(string userId, string eventId, string id)
+        private string GetMessagePossiblyWithRsvpInstruction(string message, string personStatusId, bool isFirstMessage)
         {
-            return (await _eventService.GetEventAsync(userId, eventId))?.Messages?.FirstOrDefault(m => m.Id == id);
+            if (isFirstMessage)
+            {
+                return message + $". Reply to RSVP: {Status.GetAbbreviationFromStatus(Status.Yes)}{personStatusId} for Yes, {Status.GetAbbreviationFromStatus(Status.No)}{personStatusId} for No, {Status.GetAbbreviationFromStatus(Status.Maybe)}{personStatusId} for Maybe.";
+            }
+
+            return message;
         }
     }
 }

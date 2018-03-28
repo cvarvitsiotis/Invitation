@@ -18,15 +18,15 @@ namespace Invitation.Api.Services
             _configuration = configuration;            
         }
         
-        public async Task SendAsync(List<Person> people, string message)
+        public async Task SendAsync(List<PersonStatusMessage> personStatusMessages)
         {
             TwilioClient.Init(_configuration["TwilioAccountSid"], _configuration["TwilioAuthToken"]);
             
             List<Task> tasks = new List<Task>();
 
-            people.ForEach(p =>
+            personStatusMessages.ForEach(personStatusMessage =>
             {
-                Task<MessageResource> task = SendInternalAsync(p.Phone, message);
+                Task<MessageResource> task = SendInternalAsync(personStatusMessage.Person.Phone, personStatusMessage.Message);
                 tasks.Add(task);
             });
 
