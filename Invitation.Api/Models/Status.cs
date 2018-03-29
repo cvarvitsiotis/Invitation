@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +19,7 @@ namespace Invitation.Api.Models
 
         public static string GetStatusFromAbbreviation(string abbreviation)
         {
-            return StatusWithAbbreviations.FirstOrDefault(s => s.Abbreviation == abbreviation).Status;
+            return StatusWithAbbreviations.FirstOrDefault(s => string.Equals(s.Abbreviation, abbreviation, StringComparison.InvariantCultureIgnoreCase)).Status;
         }
 
         private static List<(string Status, string Abbreviation)> StatusWithAbbreviations => new List<(string, string)>
