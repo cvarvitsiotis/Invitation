@@ -1,25 +1,28 @@
 import React from 'react';
 import storeProvider from './storeProvider';
 import '../styles/signInButton.css';
+import Typography from 'material-ui/Typography';
 
-class Home extends React.PureComponent {
+class Login extends React.PureComponent {
 
   componentDidMount() {
     this.props.initializeGoogleApiAndRenderSignInButton();
   }
 
   render() {
-    const { user, signIn } = this.props;
+    const { user } = this.props;
     return (
-      <div className="text-center">
-        <h3 className="text-primary font-weight-light">Let&#39;s get started!</h3>
+      <React.Fragment>
+        <Typography variant="display1" gutterBottom align="center">
+          Log In
+        </Typography>
         {!user.isSignedIn &&
           <div>
-            <div className="mt-4" id="googleSigninButton"></div>
-            <div className="mt-4">{user.signInError}</div>
+            <div id="googleSigninButton"></div>
+            <div>{user.signInError}</div>
           </div>
         }
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -29,11 +32,8 @@ function extraProps(props, store) {
     user: store.getState().user,
     initializeGoogleApiAndRenderSignInButton: () => {
       store.initializeGoogleApiAndRenderSignInButton();
-    },
-    signIn: () => {
-      store.signIn();
     }
   };
 }
 
-export default storeProvider(extraProps)(Home);
+export default storeProvider(extraProps)(Login);

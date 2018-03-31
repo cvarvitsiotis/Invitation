@@ -23,8 +23,10 @@ class Authentication {
 
   initializeGoogleApiAndRenderSignInButton = async signInCallback => {
     try {
-      await this.initializeGoogleApi();
-      if (!this.isGoogleApiInitialized()) return 'Unable to initialize Google API';
+      if (!this.isGoogleApiInitialized()) {
+        await this.initializeGoogleApi();
+        if (!this.isGoogleApiInitialized()) return 'Unable to initialize Google API';
+      }
       await this.signOutOfGoogleIfSignedIn();
       this.renderSigninButton(signInCallback);
     } catch(error) {

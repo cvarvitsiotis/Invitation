@@ -31,6 +31,8 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.10",
+    "material-ui": "^1.0.0-beta.39",
+    "material-ui-icons": "^1.0.0-beta.36",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
