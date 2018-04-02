@@ -1,5 +1,18 @@
 import React from 'react';
 import storeProvider from './storeProvider';
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
+import { withStyles } from 'material-ui/styles';
+import { CardContent } from 'material-ui/Card';
+import CardWithStyle from './overrides/CardWithStyle';
+
+const styles = theme => ({
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing.unit * 4
+  }
+});
 
 class AddEvent extends React.PureComponent {
   state = {
@@ -20,24 +33,35 @@ class AddEvent extends React.PureComponent {
   }
 
   render() {
+    const { classes, onCancel } = this.props;
     return (
-      <div>
-        <form onSubmit={this.onSubmitForm}>
-          <div className="form-group">
-            <input
+      <CardWithStyle>
+        <CardContent>
+          <form onSubmit={this.onSubmitForm}>
+            <TextField
+              label="Description"
               value={this.state.description}
               onChange={this.setStateOfDescription}
-              className="form-control" placeholder="Description" required></input>
-          </div>
-          <div className="form-group">
-            <input
+              fullWidth
+              margin="normal"
+              required
+            />
+            <TextField
+              label="Date"
               value={this.state.date}
               onChange={this.setStateOfDate}
-              className="form-control" placeholder="Date" required></input>
-          </div>
-          <button type="submit" className="btn btn-outline-primary">Add</button>
-        </form>
-      </div>
+              placeholder="M/D/YY"
+              fullWidth
+              margin="normal"
+              required
+            />
+            <div className={classes.buttonRow}>
+              <Button type="button" onClick={onCancel}>Cancel</Button>
+              <Button variant="raised" color="primary" type="submit">Add</Button>
+            </div>
+          </form>
+        </CardContent>
+      </CardWithStyle>
     );
   }
 }
@@ -49,8 +73,11 @@ function extraProps(props, store) {
       store.addEvent(description, new Date(date));
       props.history.goBack();
       return false;
+    },
+    onCancel: () => {
+      props.history.goBack();
     }
   };
 }
 
-export default storeProvider(extraProps)(AddEvent);
+export default withStyles(styles)(storeProvider(extraProps)(AddEvent));

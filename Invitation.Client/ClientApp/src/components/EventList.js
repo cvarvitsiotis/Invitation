@@ -2,27 +2,47 @@ import React from 'react';
 import EventListItem from './EventListItem';
 import storeProvider from './storeProvider';
 import { Link } from 'react-router-dom';
+import Button from 'material-ui/Button';
+import AddIcon from 'material-ui-icons/Add';
+import { withStyles } from 'material-ui/styles';
+import List from 'material-ui/List';
+import { CardContent } from 'material-ui/Card';
+import Typography from 'material-ui/Typography';
+import CardWithStyle from './overrides/CardWithStyle';
+
+const styles = theme => ({
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+  }
+});
 
 class EventList extends React.PureComponent {
   render() {
+    const { classes } = this.props;
     return (
-      <div className="card">
-        <div className="card-header">
-          <div className="d-flex align-items-center justify-content-between">
-            <div>Events</div>
-            <Link to="/addEvent" className="btn btn-outline-primary btn-sm">Add</Link>
-          </div>
-        </div>
-        <div className="list-group list-group-flush">
-          {Object.values(this.props.events).map(event =>
-            <EventListItem
-              key={event.id}
-              event={event}
-              match={this.props.match}
-            />
-          )}
-        </div>
-      </div>
+      <CardWithStyle>
+        <CardContent>
+          {Object.getOwnPropertyNames(this.props.events).length === 0 &&
+            <Typography variant="subheading" align="center">Add an Event</Typography>
+          }
+          {Object.getOwnPropertyNames(this.props.events).length > 0 &&
+            <List>
+              {Object.values(this.props.events).map(event =>
+                <EventListItem
+                  key={event.id}
+                  event={event}
+                  match={this.props.match}
+                />
+              )}
+            </List>
+          }
+          <Button variant="fab" color="primary" className={classes.fab} component={Link} to="/addEvent">
+            <AddIcon />
+          </Button>
+        </CardContent>
+      </CardWithStyle>
     );
   }
 }
@@ -33,4 +53,4 @@ function extraProps(props, store) {
   };
 }
 
-export default storeProvider(extraProps)(EventList);
+export default withStyles(styles)(storeProvider(extraProps)(EventList));

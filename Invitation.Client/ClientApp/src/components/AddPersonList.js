@@ -1,22 +1,26 @@
 import React from 'react';
 import AddPersonListItem from './AddPersonListItem';
 import storeProvider from './storeProvider';
+import { CardContent } from 'material-ui/Card';
+import List from 'material-ui/List';
+import CardWithStyle from './overrides/CardWithStyle';
 
 class AddPersonList extends React.PureComponent {
   render() {
     const { people } = this.props;
     return (
-      <div className="card">
-        <div className="card-header">Select Person</div>
-        <div className="list-group list-group-flush">
-          {Object.values(people).map(person =>
-            <AddPersonListItem
-              key={person.id}
-              person={person}
-            />
-          )}
-        </div>
-      </div>
+      <CardWithStyle>
+        <CardContent>
+          <List>
+            {Object.values(people).map(person =>
+              <AddPersonListItem
+                key={person.id}
+                person={person}
+              />
+            )}
+          </List>
+        </CardContent>
+      </CardWithStyle>
     );
   }
 }

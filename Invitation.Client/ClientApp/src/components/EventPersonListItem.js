@@ -1,19 +1,99 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import storeProvider from './storeProvider';
+import { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
+import { withStyles } from 'material-ui/styles';
+import Typography from 'material-ui/Typography';
+import green from 'material-ui/colors/green';
+import red from 'material-ui/colors/red';
+import orange from 'material-ui/colors/orange';
+import blueGrey from 'material-ui/colors/blueGrey';
+import blue from 'material-ui/colors/blue';
+import CheckIcon from 'material-ui-icons/Check';
+import NotInterestedIcon from 'material-ui-icons/NotInterested';
 
-const getStatusClass = status => {
+const greenColor = green[500];
+const redColor = red[500];
+
+const getStatus = (status, classes) => {
   switch(status) {
     case 'yes':
-      return 'text-success';
+      return (
+        <CheckIcon nativeColor={greenColor} />
+      );
     case 'no':
-      return 'text-danger';
-    case 'no response':
-      return 'text-info';
+      return (
+        <NotInterestedIcon nativeColor={redColor} />
+      );
+    default:
+      return (
+        <Typography variant="subheading" className={primaryColor(status, classes)}>{status}</Typography>
+      );
+  }
+};
+
+const styles = () => ({
+  greenPrimary: {
+    color: greenColor
+  },
+  greenSecondary: {
+    color: green[300]
+  },
+  redPrimary: {
+    color: redColor
+  },
+  redSecondary: {
+    color: red[300]
+  },
+  orangePrimary: {
+    color: orange[500]
+  },
+  orangeSecondary: {
+    color: orange[300]
+  },
+  bluePrimary: {
+    color: blue[500]
+  },
+  blueSecondary: {
+    color: blue[300]
+  },
+  greyPrimary: {
+    color: blueGrey[500]
+  },
+  greySecondary: {
+    color: blueGrey[300]
+  }
+});
+
+const primaryColor = (status, classes) => {
+  switch(status) {
+    case 'yes':
+      return classes.greenPrimary;
+    case 'no':
+      return classes.redPrimary;
     case 'maybe':
-      return 'text-warning';
+      return classes.orangePrimary;
+    case 'no response':
+      return classes.bluePrimary;
     case 'not prompted':
-      return 'text-secondary';
+      return classes.greyPrimary;
+    default:
+      return null;
+  }
+};
+
+const secondaryColor = (status, classes) => {
+  switch(status) {
+    case 'yes':
+      return classes.greenSecondary;
+    case 'no':
+      return classes.redSecondary;
+    case 'maybe':
+      return classes.orangeSecondary;
+    case 'no response':
+      return classes.blueSecondary;
+    case 'not prompted':
+      return classes.greySecondary;
     default:
       return null;
   }
@@ -21,13 +101,18 @@ const getStatusClass = status => {
 
 class EventPersonListItem extends React.PureComponent {
   render() {
-    const { personStatus, person } = this.props;
+    const { personStatus, person, classes } = this.props;
     return (
-      <div className="list-group-item d-flex justify-content-between">
-        <div>{person.firstName} {person.lastName}</div>
-        <div>{person.phoneType}</div>
-        <div className={getStatusClass(personStatus.status)}>{personStatus.status}</div>
-      </div>
+      <ListItem>
+        <ListItemText
+          disableTypography
+          primary={<Typography variant="subheading" className={primaryColor(personStatus.status, classes)}>{person.firstName} {person.lastName}</Typography>}
+          secondary={<Typography variant="body1" className={secondaryColor(personStatus.status, classes)}>{person.phoneType}</Typography>}
+        />
+        <ListItemSecondaryAction>
+          {getStatus(personStatus.status, classes)}
+        </ListItemSecondaryAction>
+      </ListItem>
     );
   }
 }
@@ -49,4 +134,4 @@ function extraProps(props, store) {
   };
 }
 
-export default storeProvider(extraProps)(EventPersonListItem);
+export default withStyles(styles)(storeProvider(extraProps)(EventPersonListItem));

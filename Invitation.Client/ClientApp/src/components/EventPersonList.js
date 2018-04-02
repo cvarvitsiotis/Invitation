@@ -1,27 +1,36 @@
 import React from 'react';
 import EventPersonListItem from './EventPersonListItem';
 import { Link } from 'react-router-dom';
+import { CardHeader, CardContent } from 'material-ui/Card';
+import Button from 'material-ui/Button';
+import PersonAddIcon from 'material-ui-icons/PersonAdd';
+import List from 'material-ui/List';
+import CardWithStyle from './overrides/CardWithStyle';
 
 class EventPersonList extends React.PureComponent {
   render() {
     const { personStatuses, match } = this.props;
     return (
-      <div className="card">
-        <div className="card-header">
-          <div className="d-flex align-items-center justify-content-between">
-            <div>People</div>
-            <Link to={`${match.url}/addPerson`} className="btn btn-outline-primary btn-sm">Add</Link>
-          </div>
-        </div>
-        <div className="list-group list-group-flush">
-          {Object.values(personStatuses).map(personStatus =>
-            <EventPersonListItem
-              key={personStatus.id}
-              personStatus={personStatus}
-            />
-          )}
-        </div>
-      </div>
+      <CardWithStyle>
+        <CardHeader
+          action={
+            <Button color="inherit" component={Link} to={`${match.url}/addPerson`}>
+              <PersonAddIcon />
+            </Button>
+          }
+          title="People"
+        />
+        <CardContent>
+          <List>
+            {Object.values(personStatuses).map(personStatus =>
+              <EventPersonListItem
+                key={personStatus.id}
+                personStatus={personStatus}
+              />
+            )}
+          </List>
+        </CardContent>
+      </CardWithStyle>
     );
   }
 }

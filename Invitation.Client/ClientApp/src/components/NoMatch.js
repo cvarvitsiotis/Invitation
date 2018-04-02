@@ -1,26 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import Grid from 'material-ui/Grid';
+import { CardContent, CardHeader } from 'material-ui/Card';
+import { withStyles } from 'material-ui/styles';
+import CardWithStyle from './overrides/CardWithStyle';
 
-const MyLink = props => {
-  return <Link to="/events" {...props} />;
-};
+const styles = () => ({
+  button: {
+    display: 'flex',
+    justifyContent: 'center'
+  }
+});
 
 class NoMatch extends React.PureComponent {
   render() {
+    const { classes } = this.props;
     return (
-      <React.Fragment>
-        <Typography variant="display1" gutterBottom align="center">Oops. Whaaaaaaaaat?</Typography>
-        <Grid container justify="center">
-          <Grid item>  
-            <Button variant="raised" color="primary" component={MyLink}>Home</Button>
-          </Grid>
-        </Grid>
-      </React.Fragment>
+      <CardWithStyle>
+        <CardHeader align="center" title="Page Not Found" />
+        <CardContent>
+          <div className={classes.button}>
+            <Button variant="raised" color="primary" component={Link} to="/events">Home</Button>
+          </div>
+        </CardContent>
+      </CardWithStyle>
     );
   }
 }
 
-export default NoMatch;
+export default withStyles(styles)(NoMatch);

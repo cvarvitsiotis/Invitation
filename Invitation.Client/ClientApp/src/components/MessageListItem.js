@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ListItem, ListItemText } from 'material-ui/List';
 
 const dateDisplay = dateStr => new Date(dateStr).toDateString();
 
@@ -7,10 +8,12 @@ class MessageListItem extends React.PureComponent {
   render() {
     const { message } = this.props;
     return (
-      <div  className="list-group-item d-flex justify-content-between">
-        <div>{message.content}</div>
-        <div>{dateDisplay(message.date)}</div>
-      </div>
+      <ListItem>
+        <ListItemText
+          primary={message.content}
+          secondary={dateDisplay(message.date)}
+        />
+      </ListItem>
     );
   }
 }

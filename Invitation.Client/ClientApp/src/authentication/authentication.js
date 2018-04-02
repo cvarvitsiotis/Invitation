@@ -53,6 +53,7 @@ class Authentication {
 
   renderSigninButton = signInCallback => {
     window.gapi.signin2.render('googleSigninButton', {
+      'theme': 'dark',
       'onSuccess': signInCallback
     });
   };

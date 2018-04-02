@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { ListItem, ListItemText } from 'material-ui/List';
 
 const dateDisplay = dateStr => new Date(dateStr).toDateString();
 
@@ -8,12 +9,12 @@ class EventListItem extends React.PureComponent {
   render() {
     const { event, match } = this.props;
     return (
-      <Link to={`${match.url}/${event.id}`} className="list-group-item list-group-item-action">
-        <div className="d-flex justify-content-between">
-          <div>{event.description}</div>
-          <div>{dateDisplay(event.date)}</div>
-        </div>
-      </Link>
+      <ListItem button component={Link} to={`${match.url}/${event.id}`}>
+        <ListItemText
+          primary={event.description}
+          secondary={dateDisplay(event.date)}
+        />
+      </ListItem>
     );
   }
 }

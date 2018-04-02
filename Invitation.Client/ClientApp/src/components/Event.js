@@ -7,19 +7,17 @@ class Event extends React.PureComponent {
   render() {
     const { event, match } = this.props;
     return (
-      <div>
-        <div className="mb-3">
-          <MessageList
-            messages={event.messages}
-            match={match}
-          />
-        </div>
+      <React.Fragment>
+        <MessageList
+          messages={event.messages}
+          match={match}
+        />
         <EventPersonList
           eventId={event.id}
           personStatuses={event.personStatuses}
           match={match}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }
