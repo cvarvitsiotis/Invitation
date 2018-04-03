@@ -32,6 +32,6 @@ This app lets you invite your friends to various events via text message, and it
   * ES6 transpiled via Babel
 * Build
   * Webpack
-  * Separate app and vender files
+  * Separate app and vendor files
 * Server side rendering
   * Couldn't get it to work with ASP.NET =(
