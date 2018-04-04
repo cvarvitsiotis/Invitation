@@ -32,7 +32,7 @@ class Footer extends React.PureComponent {
       <footer className={classes.footer}>
         <Typography variant="body1" color="textSecondary" className={classes.copyright}>&copy; 2018 Invititation</Typography>
         <Button href="https://github.com/cvarvitsiotis/Invitation" size="small" className={classes.gitHub}>
-          <img src="./GitHub-Mark-32px.png" width="20" height="20" />
+          <img src="/GitHub-Mark-32px.png" width="20" height="20" />
         </Button>
       </footer>
     );
