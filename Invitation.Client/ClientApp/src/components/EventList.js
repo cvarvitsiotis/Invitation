@@ -6,14 +6,16 @@ import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import { withStyles } from 'material-ui/styles';
 import List from 'material-ui/List';
-import { CardContent } from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
+import { CardContent, CardHeader } from 'material-ui/Card';
 import CardWithStyle from './overrides/CardWithStyle';
 
 const styles = theme => ({
+  extraSpacing: {
+    marginTop: '10vh'
+  },
   fab: {
     position: 'absolute',
-    bottom: theme.spacing.unit * 2,
+    bottom: theme.spacing.unit * 10,
     right: theme.spacing.unit * 2,
   }
 });
@@ -22,27 +24,33 @@ class EventList extends React.PureComponent {
   render() {
     const { classes } = this.props;
     return (
-      <CardWithStyle>
-        <CardContent>
+      <React.Fragment>
+        <CardWithStyle>
           {Object.getOwnPropertyNames(this.props.events).length === 0 &&
-            <Typography variant="subheading" align="center">Add an Event</Typography>
+            <CardHeader align="center" title="Add an Event" />
           }
-          {Object.getOwnPropertyNames(this.props.events).length > 0 &&
-            <List>
-              {Object.values(this.props.events).map(event =>
-                <EventListItem
-                  key={event.id}
-                  event={event}
-                  match={this.props.match}
-                />
-              )}
-            </List>
-          }
-          <Button variant="fab" color="primary" className={classes.fab} component={Link} to="/addEvent">
-            <AddIcon />
-          </Button>
-        </CardContent>
-      </CardWithStyle>
+          <CardContent>
+            {Object.getOwnPropertyNames(this.props.events).length > 0 &&
+                <List>
+                  {Object.values(this.props.events).map(event =>
+                    <EventListItem
+                      key={event.id}
+                      event={event}
+                      match={this.props.match}
+                    />
+                  )}
+                </List>
+            }
+            {!Object.getOwnPropertyNames(this.props.events).length > 0 &&
+              <div className={classes.extraSpacing}>
+              </div>
+            }
+          </CardContent>
+        </CardWithStyle>
+        <Button variant="fab" color="primary" className={classes.fab} component={Link} to="/addEvent">
+          <AddIcon />
+        </Button>
+      </React.Fragment>
     );
   }
 }

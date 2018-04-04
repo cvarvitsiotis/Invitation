@@ -5,6 +5,7 @@ import StateApi from '../state-api/src/index';
 import CssBaseline from 'material-ui/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import deepPurple from 'material-ui/colors/deepPurple';
+import '../styles/stickyFooter.css';
 
 const store = new StateApi();
 

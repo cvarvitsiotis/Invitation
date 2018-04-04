@@ -6,15 +6,26 @@ import Button from 'material-ui/Button';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
 import List from 'material-ui/List';
 import CardWithStyle from './overrides/CardWithStyle';
+import { withStyles } from 'material-ui/styles';
+import deepPurple from 'material-ui/colors/deepPurple';
+
+const styles = () => ({
+  button: {
+    color: deepPurple[400],
+    '&:hover': {
+      color: deepPurple[700]
+    }
+  }
+});
 
 class MessageList extends React.PureComponent {
   render() {
-    const { messages, match } = this.props;
+    const { messages, match, classes } = this.props;
     return (
       <CardWithStyle>
         <CardHeader
           action={
-            <Button color="inherit" component={Link} to={`${match.url}/addMessage`}>
+            <Button className={classes.button} component={Link} to={`${match.url}/addMessage`}>
               <AddCircleIcon />
             </Button>
           }
@@ -35,4 +46,4 @@ class MessageList extends React.PureComponent {
   }
 }
 
-export default MessageList;
+export default withStyles(styles)(MessageList);
