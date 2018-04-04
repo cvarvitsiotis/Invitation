@@ -20,11 +20,11 @@ This app lets you invite your friends to various events via text message, and it
 * Routing
   * React Router v4
 * State
-  * Custom state framework (rather than Redux)
-  * Components subscribe to a central data store via a higher order component (aka container)
-  * The container connects to the store via React's Context API
-  * The container is a PureComponent, so it only updates when its props or state change
-  * The container's state is limited to the state needed by its child component, thus avoiding unnecessary rerenders
+  * Custom state framework built from scratch (rather than Redux)
+  * Components subscribe to a central data store via a higher order component (HOC)
+  * The HOC connects to the store via React's Context API
+  * The HOC is a PureComponent, so it only updates when its props or state change
+  * The HOC's state is limited to the state needed by its child component, thus avoiding unnecessary rerenders
   * The child component is a PureComponent, so it doesn't rerender if its props or state haven't actually changed
 * Testing
   * Jest & Enzyme
@@ -32,6 +32,8 @@ This app lets you invite your friends to various events via text message, and it
   * ES6 transpiled via Babel
 * Build
   * Webpack
-  * Separate app and vender files
+  * Separate app and vendor files
 * Server side rendering
   * Couldn't get it to work with ASP.NET =(
+* Component and style framework
+  * Material-UI v1
