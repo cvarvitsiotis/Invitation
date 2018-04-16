@@ -8,10 +8,12 @@ class Event extends React.PureComponent {
     const { event, match } = this.props;
     return (
       <React.Fragment>
-        <MessageList
-          messages={event.messages}
-          match={match}
-        />
+        {Object.getOwnPropertyNames(event.personStatuses).length > 0 && 
+          <MessageList
+            messages={event.messages}
+            match={match}
+          />
+        }
         <EventPersonList
           eventId={event.id}
           personStatuses={event.personStatuses}

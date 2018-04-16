@@ -15,7 +15,7 @@ const styles = theme => ({
   },
   fab: {
     position: 'absolute',
-    bottom: theme.spacing.unit * 10,
+    bottom: '13vh', //10vh is height of footer
     right: theme.spacing.unit * 2,
   }
 });
