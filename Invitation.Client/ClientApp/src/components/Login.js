@@ -8,7 +8,8 @@ import red from 'material-ui/colors/red';
 const styles = theme => ({
   button: {
     display: 'flex',
-    justifyContent: 'center'
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   connectingToGoogle: {
     ...theme.typography.body1,
@@ -16,7 +17,8 @@ const styles = theme => ({
   },
   signInError: {
     ...theme.typography.body1,
-    color: red['A700']
+    color: red['A700'],
+    marginTop: theme.spacing.unit * 2
   }
 });
 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Authentication from '../../authentication/authentication';
+import { apiUrl } from '../../config/config';
 
 class StateApi {  
 
@@ -52,9 +53,9 @@ class StateApi {
   }
 
   postAndGetFreshEventAndMerge = (action, data, eventId) => {
-    axios.post(`https://localhost:44381/api/${action}`, data, { withCredentials: true })
+    axios.post(`${apiUrl}/api/${action}`, data, { withCredentials: true })
       .then(() => {
-        return axios.get(`https://localhost:44381/api/events/${eventId}`, { withCredentials: true });
+        return axios.get(`${apiUrl}/api/events/${eventId}`, { withCredentials: true });
       })
       .then(result => {
         this.mapEventPropsIntoObjectsAndMerge(result.data);
@@ -117,7 +118,7 @@ class StateApi {
 
   addEvent = (description, date) => {
     const addEvent = { description, date: date.toJSON() };
-    axios.post('https://localhost:44381/api/events', addEvent, { withCredentials: true })
+    axios.post(`${apiUrl}/api/events`, addEvent, { withCredentials: true })
       .then(result => {
         this.mapEventPropsIntoObjectsAndMerge(result.data);
       })
@@ -140,7 +141,7 @@ class StateApi {
 
   getEventsAndPeople = async () => {
     try {
-      const result = await axios.get('https://localhost:44381/api/everything', { withCredentials: true });
+      const result = await axios.get(`${apiUrl}/api/everything`, { withCredentials: true });
       this.mapEventsAndPeopleAndTheirPropsIntoObjectsAndMerge(result.data);
     } catch(error) {
       alert(`Unable to getEventsAndPeople due to... ${error.message}`);

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { apiUrl } from '../config/config';
 
 class Authentication {
 
@@ -74,11 +75,11 @@ class Authentication {
   };
 
   signInInternally = async accessToken => {
-    await axios.get(`https://localhost:44381/api/auth/signIn/${encodeURIComponent(accessToken)}`, { withCredentials: true });
+    await axios.get(`${apiUrl}/api/auth/signIn/${encodeURIComponent(accessToken)}`, { withCredentials: true });
   };
 
   getAntiForgeryTokens = async () => {
-    await axios.get('https://localhost:44381/api/auth/getAntiForgeryTokens', { withCredentials: true });
+    await axios.get(`${apiUrl}/api/auth/getAntiForgeryTokens`, { withCredentials: true });
   };
 
   signOut = async () => {
@@ -96,7 +97,7 @@ class Authentication {
   };
   
   signOutInternally = async () => {
-    await axios.get('https://localhost:44381/api/auth/signOut', { withCredentials: true });
+    await axios.get(`${apiUrl}/api/auth/signOut`, { withCredentials: true });
   };
 }
 

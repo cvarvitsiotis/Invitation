@@ -72,7 +72,7 @@ namespace Invitation.Api
             app.UseAuthentication();
 
             app.UseCors(builder => builder
-                .WithOrigins("https://localhost:44326")
+                .WithOrigins(env.IsDevelopment() ? "https://localhost:44326" : "https://nv8-client.azurewebsites.net")
                  .AllowAnyMethod()
                  .AllowAnyHeader()
                  .AllowCredentials());
