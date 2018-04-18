@@ -1,17 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <UserSecretsId>b94ac380-3800-440e-8fb6-2f16a509d99e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0-preview1-final" />
-    <PackageReference Include="Twilio" Version="5.10.0" />
+    <None Remove="Properties\PublishProfiles\AdvancedSettings.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0-preview2-final" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.0-alpha" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.1.0-preview" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.0-preview2-final" />
+    <PackageReference Include="Twilio" Version="5.11.0" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 </Project>

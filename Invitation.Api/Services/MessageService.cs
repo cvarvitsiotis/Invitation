@@ -68,9 +68,12 @@ namespace Invitation.Api.Services
 
         private string GetMessagePossiblyWithRsvpInstruction(string message, string personStatusId, bool isFirstMessage)
         {
+            message = message?.Trim();
+
             if (isFirstMessage)
             {
-                return message + $". Reply to RSVP: {Status.GetAbbreviationFromStatus(Status.Yes)}{personStatusId} for Yes, {Status.GetAbbreviationFromStatus(Status.No)}{personStatusId} for No, {Status.GetAbbreviationFromStatus(Status.Maybe)}{personStatusId} for Maybe.";
+                if (!(new char[] { '.', '!', '?' }).Contains(message.Last())) message += '.';
+                return $"{message} Reply to RSVP: {Status.GetAbbreviationFromStatus(Status.Yes)}{personStatusId} for Yes, {Status.GetAbbreviationFromStatus(Status.No)}{personStatusId} for No, {Status.GetAbbreviationFromStatus(Status.Maybe)}{personStatusId} for Maybe.";
             }
 
             return message;
