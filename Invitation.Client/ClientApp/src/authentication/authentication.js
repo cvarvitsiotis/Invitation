@@ -79,7 +79,9 @@ class Authentication {
   };
 
   getAntiForgeryTokens = async () => {
-    await axios.get(`${apiUrl}/api/auth/getAntiForgeryTokens`, { withCredentials: true });
+    const result = await axios.get(`${apiUrl}/api/auth/getAntiForgeryTokens`, { withCredentials: true });
+    //Cookie name must match axios's xsrfCookieName
+    document.cookie = `XSRF-TOKEN=${encodeURIComponent(result.data)}`;
   };
 
   signOut = async () => {

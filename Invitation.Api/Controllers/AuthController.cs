@@ -62,11 +62,8 @@ namespace Invitation.Api.Controllers
         public IActionResult GetAntiForgeryTokens()
         {
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            
-            //Cookie name must match axios's xsrfCookieName
-            HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
 
-            return Ok();
+            return Ok(tokens.RequestToken);
         }
 
         [HttpGet("signOut")]

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ namespace Invitation.Api
                 .AddCookie(options =>
                 {
                     options.Cookie.HttpOnly = true;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.Events.OnRedirectToLogin = context =>
                     {
                         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;    
@@ -30,7 +33,13 @@ namespace Invitation.Api
                 });
 
             //HeaderName must match axios's xsrfHeaderName
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-XSRF-TOKEN";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
 
             services.AddCors();
             services.AddHttpClient();
@@ -73,9 +82,9 @@ namespace Invitation.Api
 
             app.UseCors(builder => builder
                 .WithOrigins(env.IsDevelopment() ? "https://localhost:44326" : "https://nv8-client.azurewebsites.net")
-                 .AllowAnyMethod()
-                 .AllowAnyHeader()
-                 .AllowCredentials());
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.UseHttpsRedirection();
             app.UseMvc();
