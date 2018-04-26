@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using Twilio.Security;
@@ -19,7 +19,7 @@ namespace Invitation.Api.Filters
         public class ValidateExternalRequestImpl : ActionFilterAttribute
         {
             private readonly RequestValidator _requestValidator;
-                
+
             public ValidateExternalRequestImpl(IConfiguration configuration)
             {
                 var authToken = configuration["TwilioAuthToken"];
@@ -40,7 +40,7 @@ namespace Invitation.Api.Filters
             private bool IsValidRequest(HttpRequest request)
             {
                 var requestUrl = RequestRawUrl(request);
-                var parameters = ToDictionary(request.Query);
+                var parameters = new Dictionary<string, string>();
                 var signature = request.Headers["X-Twilio-Signature"].FirstOrDefault();
                 return _requestValidator.Validate(requestUrl, parameters, signature);
             }
@@ -48,13 +48,6 @@ namespace Invitation.Api.Filters
             private static string RequestRawUrl(HttpRequest request)
             {
                 return $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
-            }
-
-            private static IDictionary<string, string> ToDictionary(IQueryCollection collection)
-            {
-                return collection.Keys
-                    .Select(key => new { Key = key, Value = collection[key] })
-                    .ToDictionary(p => p.Key, p => p.Value.ToString());
             }
         }
     }

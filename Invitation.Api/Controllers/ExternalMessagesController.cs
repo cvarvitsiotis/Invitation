@@ -1,10 +1,8 @@
-using System.Threading.Tasks;
 using Invitation.Api.Filters;
-using Invitation.Api.Models;
 using Invitation.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Twilio.TwiML;
+using System.Threading.Tasks;
 
 namespace Invitation.Api.Controllers
 {
