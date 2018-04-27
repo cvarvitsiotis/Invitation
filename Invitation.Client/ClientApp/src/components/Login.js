@@ -3,7 +3,6 @@ import storeProvider from './storeProvider';
 import{ CardContent, CardHeader } from 'material-ui/Card';
 import { withStyles } from 'material-ui/styles';
 import CardWithStyle from './overrides/CardWithStyle';
-import red from 'material-ui/colors/red';
 
 const styles = theme => ({
   button: {
@@ -17,8 +16,8 @@ const styles = theme => ({
   },
   signInError: {
     ...theme.typography.body1,
-    color: red['A700'],
-    marginTop: theme.spacing.unit * 2
+    color: theme.palette.primary.main,
+    marginTop: theme.spacing.unit * 3
   }
 });
 

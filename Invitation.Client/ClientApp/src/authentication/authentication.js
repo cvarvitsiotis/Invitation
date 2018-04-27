@@ -48,15 +48,15 @@ class Authentication {
 
   signOutOfGoogleIfSignedIn = async () => {
     if (window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-      await window.gapi.auth2.getAuthInstance().signOut();
+      await this.signOutOfGoogle();
     }
   };
 
   renderSigninButton = signInCallback => {
     window.gapi.signin2.render('googleSigninButton', {
-      'theme': 'dark',
-      'onSuccess': signInCallback
+      'theme': 'dark'
     });
+    window.gapi.auth2.getAuthInstance().attachClickHandler('googleSigninButton', {}, signInCallback, null);
   };
 
   signIn = async googleUser => {

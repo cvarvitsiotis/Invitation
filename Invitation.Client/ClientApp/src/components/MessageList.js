@@ -3,7 +3,7 @@ import MessageListItem from './MessageListItem';
 import { Link } from 'react-router-dom';
 import { CardHeader, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
-import AddCircleIcon from 'material-ui-icons/AddCircle';
+import MessageIcon from 'material-ui-icons/Message';
 import List from 'material-ui/List';
 import CardWithStyle from './overrides/CardWithStyle';
 import { withStyles } from 'material-ui/styles';
@@ -26,7 +26,7 @@ class MessageList extends React.PureComponent {
         <CardHeader
           action={
             <Button className={classes.button} component={Link} to={`${match.url}/addMessage`}>
-              <AddCircleIcon />
+              <MessageIcon />
             </Button>
           }
           title="Messages"

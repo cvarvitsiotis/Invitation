@@ -55,13 +55,20 @@ class StateApi {
   postAndGetFreshEventAndMerge = (action, data, eventId) => {
     axios.post(`${apiUrl}/api/${action}`, data, { withCredentials: true })
       .then(() => {
-        return axios.get(`${apiUrl}/api/events/${eventId}`, { withCredentials: true });
+        this.getFreshEventAndMerge(eventId);
       })
+      .catch(error => {
+        alert(`Unable to postAndGetFreshEventAndMerge due to... ${error.message}`);
+      });
+  };
+
+  getFreshEventAndMerge = eventId => {
+    axios.get(`${apiUrl}/api/events/${eventId}`, { withCredentials: true })
       .then(result => {
         this.mapEventPropsIntoObjectsAndMerge(result.data);
       })
       .catch(error => {
-        alert(`Unable to postAndGetFreshEventAndMerge due to... ${error.message}`);
+        alert(`Unable to getFreshEventAndMerge due to... ${error.message}`);
       });
   };
 
@@ -139,6 +146,10 @@ class StateApi {
     this.postAndGetFreshEventAndMerge(action, addPersonStatus, eventId);
   };
 
+  refreshEvent = eventId => {
+    this.getFreshEventAndMerge(eventId);
+  };
+  
   getEventsAndPeople = async () => {
     try {
       const result = await axios.get(`${apiUrl}/api/everything`, { withCredentials: true });
