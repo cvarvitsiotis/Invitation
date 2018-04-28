@@ -1,1 +1,1 @@
-export const apiUrl = 'https://nv8-api.azurewebsites.net'; //'https://localhost:44381'
+export const apiUrl = true ? 'https://nv8-api.azurewebsites.net' : 'https://localhost:44381';

@@ -9,6 +9,7 @@ import Login from './Login';
 import Appbar from './Appbar';
 import PrivateRoute from './PrivateRoute';
 import Footer from './Footer';
+import Privacy from './Privacy';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
@@ -56,6 +57,7 @@ class App extends React.Component {
               <Route exact path="/" render={props =>
                 this.state.user.isSignedIn ? <Redirect to='/events' /> : <Login {...props} />
               }/>
+              <Route exact path="/privacy" component={Privacy} />
               <PrivateRoute exact path="/events" component={EventList} />
               <PrivateRoute exact path="/events/:id" component={Event} />
               <PrivateRoute path="/events/:id/addPerson" component={AddPersonList} />

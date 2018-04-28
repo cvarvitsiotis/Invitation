@@ -20,7 +20,7 @@ class NoMatch extends React.PureComponent {
         <CardHeader align="center" title="Page Not Found" />
         <CardContent>
           <div className={classes.button}>
-            <Button variant="raised" color="primary" component={Link} to="/events">Home</Button>
+            <Button color="primary" size="large" component={Link} to="/events">Home</Button>
           </div>
         </CardContent>
       </CardWithStyle>
