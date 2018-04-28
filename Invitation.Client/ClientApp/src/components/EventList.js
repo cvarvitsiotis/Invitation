@@ -11,12 +11,12 @@ import CardWithStyle from './overrides/CardWithStyle';
 
 const styles = theme => ({
   extraSpacing: {
-    marginTop: '10vh'
+    marginTop: '70px'
   },
   fab: {
-    position: 'absolute',
-    bottom: '13vh', //10vh is height of footer
-    right: theme.spacing.unit * 2,
+    position: 'fixed',
+    bottom: `${70 + theme.spacing.unit * 3}px`, //70px is height of footer
+    right: theme.spacing.unit * 3
   }
 });
 

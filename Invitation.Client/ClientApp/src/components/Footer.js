@@ -11,7 +11,7 @@ const styles = theme => ({
     alignItems: 'center',
     backgroundColor: grey[200],
     borderTop: `1px solid ${grey[300]}`,
-    height: '10vh'
+    height: '70px'
   },
   copyright: {
     marginLeft: theme.spacing.unit * 3
