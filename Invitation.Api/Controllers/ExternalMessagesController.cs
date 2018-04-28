@@ -2,7 +2,9 @@ using Invitation.Api.Filters;
 using Invitation.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 using System.Threading.Tasks;
+using Twilio.TwiML;
 
 namespace Invitation.Api.Controllers
 {
@@ -27,7 +29,7 @@ namespace Invitation.Api.Controllers
             string personStatusId = body.Substring(1);
             await _personStatusService.UpdatePersonStatusFromMessageResponseAsync(personStatusId, statusAbbreviation, from);
             
-            return Ok();
+            return Content(new MessagingResponse().ToString(), MediaTypeNames.Text.Xml);
         }
     }
 }
