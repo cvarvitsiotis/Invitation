@@ -23,7 +23,7 @@ class Privacy extends React.PureComponent {
         <CardContent>
           <Typography variant="subheading" gutterBottom>Information Collected</Typography>
           <Typography paragraph>
-            When you log into your Google account from this site, Google asks you if you want to grant this site access to your profile and contacts.<br />
+            When you sign into your Google account from this site, Google asks you if you want to grant this site access to your profile and contacts.<br />
             You can revoke this site&#39;s access anytime through Google.
           </Typography>
           <Typography variant="subheading" gutterBottom>How Information Is Used</Typography>

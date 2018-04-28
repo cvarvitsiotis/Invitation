@@ -46,7 +46,7 @@ class Appbar extends React.PureComponent {
     this.setState({ menuAnchorEl: null });
   };
 
-  onLogOutClick = () => {
+  onSignOutClick = () => {
     this.onMenuClose();
     this.props.signOut();
   };
@@ -95,7 +95,7 @@ class Appbar extends React.PureComponent {
                   {user.name &&
                     <MenuItem disabled divider>Hi, {user.name}!</MenuItem>
                   }
-                  <MenuItem onClick={this.onLogOutClick}>Log Out</MenuItem>
+                  <MenuItem onClick={this.onSignOutClick}>Sign Out</MenuItem>
                 </Menu>
               </div>
             }

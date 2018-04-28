@@ -5,7 +5,7 @@ import NoMatch from './NoMatch';
 import AddMessage from './AddMessage';
 import AddPersonList from './AddPersonList';
 import AddEvent from './AddEvent';
-import Login from './Login';
+import Signin from './Signin';
 import Appbar from './Appbar';
 import PrivateRoute from './PrivateRoute';
 import Footer from './Footer';
@@ -55,7 +55,7 @@ class App extends React.Component {
             <Route component={Appbar} />
             <Switch>
               <Route exact path="/" render={props =>
-                this.state.user.isSignedIn ? <Redirect to='/events' /> : <Login {...props} />
+                this.state.user.isSignedIn ? <Redirect to='/events' /> : <Signin {...props} />
               }/>
               <Route exact path="/privacy" component={Privacy} />
               <PrivateRoute exact path="/events" component={EventList} />

@@ -21,7 +21,7 @@ const styles = theme => ({
   }
 });
 
-class Login extends React.PureComponent {
+class Signin extends React.PureComponent {
   componentDidMount() {
     this.props.initializeGoogleApiAndRenderSignInButton();
   }
@@ -30,7 +30,7 @@ class Login extends React.PureComponent {
     const { user, classes } = this.props;
     return (
       <CardWithStyle>
-        <CardHeader align="center" title="Log In" />
+        <CardHeader align="center" title="Sign In" />
         <CardContent>
           {!user.isSignedIn &&
             <div className={classes.button}>
@@ -53,4 +53,4 @@ function extraProps(props, store) {
   };
 }
 
-export default withStyles(styles)(storeProvider(extraProps)(Login));
+export default withStyles(styles)(storeProvider(extraProps)(Signin));
