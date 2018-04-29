@@ -40,7 +40,7 @@ class Footer extends React.PureComponent {
     const { classes } = this.props;
     return (
       <footer className={`${classes.entireFooter} ${classes.footerItems}`}>
-        <Typography variant="body1" color="textSecondary" className={classes.copyright}>&copy; {new Date().getFullYear()} Invititation</Typography>
+        <Typography variant="body1" color="textSecondary" className={classes.copyright}>&copy; {new Date().getFullYear()} Invitation</Typography>
         <div className={classes.footerItems}>
           <Typography variant="body1" color="textSecondary" className={classes.privacy} component={Link} to='/privacy'>Privacy</Typography>
           <Button href="https://github.com/cvarvitsiotis/Invitation" size="small" className={classes.gitHub}>
