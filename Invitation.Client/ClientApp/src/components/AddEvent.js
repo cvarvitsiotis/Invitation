@@ -49,11 +49,14 @@ class AddEvent extends React.PureComponent {
             <TextField
               label="Date"
               value={this.state.date}
+              type="date"
               onChange={this.setStateOfDate}
-              placeholder="M/D/YY"
               fullWidth
               margin="normal"
               required
+              InputLabelProps={{
+                shrink: true
+              }}
             />
             <div className={classes.buttonRow}>
               <Button type="button" onClick={onCancel}>Cancel</Button>
