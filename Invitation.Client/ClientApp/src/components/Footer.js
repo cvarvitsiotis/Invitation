@@ -1,8 +1,8 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import grey from 'material-ui/colors/grey';
-import Button from 'material-ui/Button';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import grey from '@material-ui/core/colors/grey';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
@@ -40,9 +40,9 @@ class Footer extends React.PureComponent {
     const { classes } = this.props;
     return (
       <footer className={`${classes.entireFooter} ${classes.footerItems}`}>
-        <Typography variant="body1" color="textSecondary" className={classes.copyright}>&copy; {new Date().getFullYear()} Invitation</Typography>
+        <Typography variant="body2" color="textSecondary" className={classes.copyright}>&copy; {new Date().getFullYear()} Invitation</Typography>
         <div className={classes.footerItems}>
-          <Typography variant="body1" color="textSecondary" className={classes.privacy} component={Link} to='/privacy'>Privacy</Typography>
+          <Typography variant="body2" color="textSecondary" className={classes.privacy} component={Link} to='/privacy'>Privacy</Typography>
           <Button href="https://github.com/cvarvitsiotis/Invitation" size="small" className={classes.gitHub}>
             <img src="/GitHub-Mark-32px.png" width="20" height="20" />
           </Button>

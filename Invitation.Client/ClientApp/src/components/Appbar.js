@@ -1,14 +1,15 @@
 import React from 'react';
 import storeProvider from './storeProvider';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Avatar from 'material-ui/Avatar';
-import IconButton from 'material-ui/IconButton';
-import Menu, { MenuItem } from 'material-ui/Menu';
-import AccountCircleIcon from 'material-ui-icons/AccountCircle';
-import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
-import { withStyles } from 'material-ui/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import { withStyles } from '@material-ui/core/styles';
 
 const reViewEvent = /^\/events\/\d+$/;
 const reAddPerson = /^\/events\/\d+\/addPerson$/;
@@ -64,7 +65,7 @@ class Appbar extends React.PureComponent {
               <ChevronLeftIcon onClick={goBack}/>
             </IconButton>
           }
-          <Typography variant="title" color="inherit" className={classes.flex}>{AppbarTitle(location)}</Typography>
+          <Typography variant="h6" color="inherit" className={classes.flex}>{AppbarTitle(location)}</Typography>
           <div>
             {!user.isSignedIn && user.picture &&
               <Avatar src={user.picture} />

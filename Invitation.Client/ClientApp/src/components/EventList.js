@@ -2,11 +2,12 @@ import React from 'react';
 import EventListItem from './EventListItem';
 import storeProvider from './storeProvider';
 import { Link } from 'react-router-dom';
-import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
-import { withStyles } from 'material-ui/styles';
-import List from 'material-ui/List';
-import { CardContent, CardHeader } from 'material-ui/Card';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 import CardWithStyle from './overrides/CardWithStyle';
 
 const styles = theme => ({
@@ -47,9 +48,9 @@ class EventList extends React.PureComponent {
             }
           </CardContent>
         </CardWithStyle>
-        <Button variant="fab" color="primary" className={classes.fab} component={Link} to="/addEvent">
+        <Fab color="primary" className={classes.fab} component={Link} to="/addEvent">
           <AddIcon />
-        </Button>
+        </Fab>
       </React.Fragment>
     );
   }

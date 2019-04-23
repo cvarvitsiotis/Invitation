@@ -1,9 +1,9 @@
 import React from 'react';
 import storeProvider from './storeProvider';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
-import { withStyles } from 'material-ui/styles';
-import { CardContent } from 'material-ui/Card';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
+import CardContent from '@material-ui/core/CardContent';
 import CardWithStyle from './overrides/CardWithStyle';
 
 const styles = theme => ({
@@ -60,7 +60,7 @@ class AddEvent extends React.PureComponent {
             />
             <div className={classes.buttonRow}>
               <Button type="button" onClick={onCancel}>Cancel</Button>
-              <Button variant="raised" color="primary" type="submit">Add</Button>
+              <Button variant="contained" color="primary" type="submit">Add</Button>
             </div>
           </form>
         </CardContent>

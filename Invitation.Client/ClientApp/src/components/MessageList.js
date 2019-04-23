@@ -1,13 +1,14 @@
 import React from 'react';
 import MessageListItem from './MessageListItem';
 import { Link } from 'react-router-dom';
-import { CardHeader, CardContent } from 'material-ui/Card';
-import Button from 'material-ui/Button';
-import MessageIcon from 'material-ui-icons/Message';
-import List from 'material-ui/List';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import MessageIcon from '@material-ui/icons/Message';
+import List from '@material-ui/core/List';
 import CardWithStyle from './overrides/CardWithStyle';
-import { withStyles } from 'material-ui/styles';
-import deepPurple from 'material-ui/colors/deepPurple';
+import { withStyles } from '@material-ui/core/styles';
+import deepPurple from '@material-ui/core/colors/deepPurple';
 
 const styles = () => ({
   button: {

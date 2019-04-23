@@ -2,15 +2,16 @@ import React from 'react';
 import EventPersonListItem from './EventPersonListItem';
 import storeProvider from './storeProvider';
 import { Link } from 'react-router-dom';
-import { CardHeader, CardContent } from 'material-ui/Card';
-import Button from 'material-ui/Button';
-import PersonAddIcon from 'material-ui-icons/PersonAdd';
-import RefreshIcon from 'material-ui-icons/Refresh';
-import List from 'material-ui/List';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import List from '@material-ui/core/List';
 import CardWithStyle from './overrides/CardWithStyle';
-import { withStyles } from 'material-ui/styles';
-import deepPurple from 'material-ui/colors/deepPurple';
-import blueGrey from 'material-ui/colors/blueGrey';
+import { withStyles } from '@material-ui/core/styles';
+import deepPurple from '@material-ui/core/colors/deepPurple';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 
 const styles = () => ({
   personAddButton: {

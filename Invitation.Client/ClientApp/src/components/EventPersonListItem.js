@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import storeProvider from './storeProvider';
-import { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import green from 'material-ui/colors/green';
-import red from 'material-ui/colors/red';
-import orange from 'material-ui/colors/orange';
-import blueGrey from 'material-ui/colors/blueGrey';
-import blue from 'material-ui/colors/blue';
-import CheckIcon from 'material-ui-icons/Check';
-import NotInterestedIcon from 'material-ui-icons/NotInterested';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import green from '@material-ui/core/colors/green';
+import red from '@material-ui/core/colors/red';
+import orange from '@material-ui/core/colors/orange';
+import blueGrey from '@material-ui/core/colors/blueGrey';
+import blue from '@material-ui/core/colors/blue';
+import CheckIcon from '@material-ui/icons/Check';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 const greenColor = green[500];
 const redColor = red[500];
@@ -27,7 +29,7 @@ const getStatus = (status, classes) => {
       );
     default:
       return (
-        <Typography variant="subheading" className={primaryColor(status, classes)}>{status}</Typography>
+        <Typography variant="subtitle1" className={primaryColor(status, classes)}>{status}</Typography>
       );
   }
 };
@@ -106,8 +108,8 @@ class EventPersonListItem extends React.PureComponent {
       <ListItem>
         <ListItemText
           disableTypography
-          primary={<Typography variant="subheading" className={primaryColor(personStatus.status, classes)}>{person.firstName} {person.lastName}</Typography>}
-          secondary={<Typography variant="body1" className={secondaryColor(personStatus.status, classes)}>{person.phoneType}</Typography>}
+          primary={<Typography variant="subtitle1" className={primaryColor(personStatus.status, classes)}>{person.firstName} {person.lastName}</Typography>}
+          secondary={<Typography variant="body2" className={secondaryColor(personStatus.status, classes)}>{person.phoneType}</Typography>}
         />
         <ListItemSecondaryAction>
           {getStatus(personStatus.status, classes)}

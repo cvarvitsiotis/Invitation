@@ -1,6 +1,6 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import Card from 'material-ui/Card';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
 
 const styles = theme => ({
   card: {

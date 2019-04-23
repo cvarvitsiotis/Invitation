@@ -1,8 +1,8 @@
 import React from 'react';
 import AddPersonListItem from './AddPersonListItem';
 import storeProvider from './storeProvider';
-import { CardContent } from 'material-ui/Card';
-import List from 'material-ui/List';
+import CardContent from '@material-ui/core/CardContent';
+import List from '@material-ui/core/List';
 import CardWithStyle from './overrides/CardWithStyle';
 
 class AddPersonList extends React.PureComponent {

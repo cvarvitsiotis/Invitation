@@ -53,7 +53,7 @@ namespace Invitation.Api
 
                 options.Filters.Add(new ValidateAntiForgeryTokenAttribute());
             })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase("Api"));
             services.AddScoped<IExternalAuthService, ExternalAuthService>();

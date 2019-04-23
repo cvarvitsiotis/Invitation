@@ -1,7 +1,8 @@
 import React from 'react';
 import storeProvider from './storeProvider';
-import{ CardContent, CardHeader } from 'material-ui/Card';
-import { withStyles } from 'material-ui/styles';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import { withStyles } from '@material-ui/core/styles';
 import CardWithStyle from './overrides/CardWithStyle';
 
 const styles = theme => ({

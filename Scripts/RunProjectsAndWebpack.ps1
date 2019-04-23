@@ -1,3 +1,4 @@
+Start-Process -WorkingDirectory "C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin" -FilePath "az" -ArgumentList "login"
 Start-Process -WorkingDirectory "..\Invitation.Api" -FilePath "dotnet" -ArgumentList "watch run"
 Start-Process -WorkingDirectory "..\Invitation.Client" -FilePath "dotnet" -ArgumentList "run"
 Start-Process -WorkingDirectory "..\Invitation.Client\ClientApp\" -FilePath "webpack" -ArgumentList "-wd"

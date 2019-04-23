@@ -12,7 +12,7 @@ import Footer from './Footer';
 import Privacy from './Privacy';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   appbarAndBody: {

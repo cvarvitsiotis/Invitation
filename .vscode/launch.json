@@ -11,7 +11,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Invitation.Api/bin/Debug/netcoreapp2.1/Invitation.Api.dll",
+            "program": "${workspaceFolder}/Invitation.Api/bin/Debug/netcoreapp2.2/Invitation.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Invitation.Api",
             "stopAtEntry": false,

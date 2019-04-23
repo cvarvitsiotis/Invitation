@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import storeProvider from './storeProvider';
-import { ListItem, ListItemText, ListItemSecondaryAction } from 'material-ui/List';
-import Typography from 'material-ui/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Typography from '@material-ui/core/Typography';
 
 const formatPhone = phone => {
   return `(${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8)}`;
@@ -27,7 +29,7 @@ class AddPersonListItem extends React.PureComponent {
             secondary={person.phoneType}
           />
           <ListItemSecondaryAction>
-            <Typography variant="subheading">{formatPhone(person.phone)}</Typography>
+            <Typography variant="subtitle1">{formatPhone(person.phone)}</Typography>
           </ListItemSecondaryAction>
         </ListItem>
       )}/>
