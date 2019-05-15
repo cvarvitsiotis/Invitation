@@ -9,7 +9,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import List from '@material-ui/core/List';
 import CardWithStyle from './overrides/CardWithStyle';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 

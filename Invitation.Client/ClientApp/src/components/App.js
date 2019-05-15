@@ -12,11 +12,11 @@ import Footer from './Footer';
 import Privacy from './Privacy';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
   appbarAndBody: {
-    paddingBottom: theme.spacing.unit * 3
+    paddingBottom: theme.spacing(3)
   },
   footer: {
     gridRowStart: 2,

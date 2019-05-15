@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import App from '../components/App';
 import StateApi from '../state-api/src/index';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import '../styles/stickyFooter.css';
 
@@ -12,18 +13,15 @@ const store = new StateApi();
 const theme = createMuiTheme({
   palette: {
     primary: deepPurple
-  },
-  typography: {
-    useNextVariants: true,
   }
 });
 
 const Root = () => {
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <App store={store} />
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 

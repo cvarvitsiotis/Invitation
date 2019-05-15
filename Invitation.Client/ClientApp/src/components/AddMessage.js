@@ -2,7 +2,7 @@ import React from 'react';
 import storeProvider from './storeProvider';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import CardContent from '@material-ui/core/CardContent';
 import CardWithStyle from './overrides/CardWithStyle';
 
@@ -10,7 +10,7 @@ const styles = theme => ({
   buttonRow: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginTop: theme.spacing.unit * 4
+    marginTop: theme.spacing(4)
   }
 });
 

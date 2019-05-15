@@ -9,7 +9,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 const reViewEvent = /^\/events\/\d+$/;
 const reAddPerson = /^\/events\/\d+\/addPerson$/;
@@ -29,8 +29,8 @@ const styles = theme => ({
     flex: 1,
   },
   checkvronLeft: {
-    marginLeft: -theme.spacing.unit * 1.5,
-    marginRight: theme.spacing.unit * 2.5
+    marginLeft: -theme.spacing(1.5),
+    marginRight: theme.spacing(2.5)
   }
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import grey from '@material-ui/core/colors/grey';
 import Button from '@material-ui/core/Button';
@@ -17,7 +17,7 @@ const styles = theme => ({
     alignItems: 'center'
   },
   copyright: {
-    marginLeft: theme.spacing.unit * 3
+    marginLeft: theme.spacing(3)
   },
   privacy: {
     textDecoration: 'none',
@@ -26,8 +26,8 @@ const styles = theme => ({
     }
   },
   gitHub: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     opacity: 0.40,
     '&:hover': {
       opacity: 0.75

@@ -4,7 +4,7 @@ import storeProvider from './storeProvider';
 import { Link } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import List from '@material-ui/core/List';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -16,8 +16,8 @@ const styles = theme => ({
   },
   fab: {
     position: 'fixed',
-    bottom: `${70 + theme.spacing.unit * 3}px`, //70px is height of footer
-    right: theme.spacing.unit * 3
+    bottom: `${70 + theme.spacing(3)}px`, //70px is height of footer
+    right: theme.spacing(3)
   }
 });
 

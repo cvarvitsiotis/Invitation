@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import CardWithStyle from './overrides/CardWithStyle';
 import Typography from '@material-ui/core/Typography';
 
@@ -11,7 +11,7 @@ const styles = theme => ({
   button: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing(3)
   }
 });
 

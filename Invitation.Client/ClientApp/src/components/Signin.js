@@ -2,7 +2,7 @@ import React from 'react';
 import storeProvider from './storeProvider';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import CardWithStyle from './overrides/CardWithStyle';
 
 const styles = theme => ({
@@ -18,7 +18,7 @@ const styles = theme => ({
   signInError: {
     ...theme.typography.body1,
     color: theme.palette.primary.main,
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing(3)
   }
 });
 

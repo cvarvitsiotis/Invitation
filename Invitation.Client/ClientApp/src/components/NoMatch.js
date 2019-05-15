@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import CardWithStyle from './overrides/CardWithStyle';
 
 const styles = () => ({
