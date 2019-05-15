@@ -36,4 +36,5 @@ This app lets you invite your friends to various events via text message, and it
 * Server side rendering
   * Couldn't get it to work with ASP.NET =(
 * Component and style framework
-  * Material-UI v1
+  * Material-UI v4
+  * Material-UI Pickers v3
