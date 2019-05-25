@@ -21,11 +21,11 @@ const getStatus = (status, classes) => {
   switch(status) {
     case 'yes':
       return (
-        <CheckIcon nativeColor={greenColor} />
+        <CheckIcon htmlColor={greenColor} />
       );
     case 'no':
       return (
-        <NotInterestedIcon nativeColor={redColor} />
+        <NotInterestedIcon htmlColor={redColor} />
       );
     default:
       return (
