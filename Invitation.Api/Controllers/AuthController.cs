@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Invitation.Api.Models;
 using Invitation.Api.Services;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Invitation.Api.Controllers
 {
@@ -23,6 +25,8 @@ namespace Invitation.Api.Controllers
         private readonly IExternalPersonService _externalPersonService;
         private readonly IPersonService _personService;
         private readonly IAntiforgery _antiforgery;
+        
+        private const string SingleUseAntiForgeryToken = "SingleUseAntiForgeryToken";
 
         public AuthController(IExternalAuthService externalAuthService, IExternalPersonService externalPersonService, IPersonService personService, IAntiforgery antiforgery)
         {
@@ -40,11 +44,12 @@ namespace Invitation.Api.Controllers
             ExternalClaimsIdentity externalClaimsIdentity = await _externalAuthService.GetExternalClaimsIdentityAsync(WebUtility.UrlDecode(accessToken));
             
             if (externalClaimsIdentity?.Sub == null) return BadRequest();
-            
+
+            string singleUseAntiForgeryToken = GetAndSaveSingleUseAntiForgeryToken();
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, externalClaimsIdentity.Sub),
-                new Claim("ExternalAccessToken", accessToken)
+                new Claim(ClaimTypes.Name, externalClaimsIdentity.Sub)
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
@@ -56,14 +61,14 @@ namespace Invitation.Api.Controllers
                 await _personService.UpsertPeopleAsync(externalClaimsIdentity.Sub, people);
             }
 
-            return Ok();
+            return Ok(singleUseAntiForgeryToken);
         }
 
         [IgnoreAntiforgeryToken]
-        [HttpGet("getAntiForgeryTokens/{accessToken}")]
-        public IActionResult GetAntiForgeryTokens(string accessToken)
+        [HttpGet("getAntiForgeryTokens/{singleUseAntiForgeryToken}")]
+        public IActionResult GetAntiForgeryTokens(string singleUseAntiForgeryToken)
         {
-            if (!CanAuthenticateWithMoreThanCSRFVulnerableCookie(accessToken)) return BadRequest();
+            if (!CanAuthenticateAndDeleteSingleUseAntiForgeryToken(singleUseAntiForgeryToken)) return BadRequest();
 
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
 
@@ -78,9 +83,27 @@ namespace Invitation.Api.Controllers
             return Ok();
         }
 
-        private bool CanAuthenticateWithMoreThanCSRFVulnerableCookie(string accessToken)
+        private string GetAndSaveSingleUseAntiForgeryToken()
         {
-            return string.Equals(User.FindFirstValue("ExternalAccessToken"), accessToken, StringComparison.InvariantCultureIgnoreCase);
+            using (var generator = RandomNumberGenerator.Create())
+            {
+                byte[] tokenData = new byte[32];
+                generator.GetBytes(tokenData);
+                string token = WebEncoders.Base64UrlEncode(tokenData);
+                HttpContext.Session.SetString(SingleUseAntiForgeryToken, token);
+                return token;
+            }
+        }
+
+        private bool CanAuthenticateAndDeleteSingleUseAntiForgeryToken(string singleUseAntiForgeryToken)
+        {
+            if (string.Equals(HttpContext.Session.GetString(SingleUseAntiForgeryToken), WebUtility.UrlDecode(singleUseAntiForgeryToken), StringComparison.InvariantCultureIgnoreCase))
+            {
+                HttpContext.Session.Remove(SingleUseAntiForgeryToken);
+                return true;
+            }
+
+            return false;
         }
     }
 }
