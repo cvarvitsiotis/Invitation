@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -39,10 +40,11 @@ namespace Invitation.Api.Controllers
             ExternalClaimsIdentity externalClaimsIdentity = await _externalAuthService.GetExternalClaimsIdentityAsync(WebUtility.UrlDecode(accessToken));
             
             if (externalClaimsIdentity?.Sub == null) return BadRequest();
-
+            
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, externalClaimsIdentity.Sub)
+                new Claim(ClaimTypes.Name, externalClaimsIdentity.Sub),
+                new Claim("ExternalAccessToken", accessToken)
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
@@ -58,9 +60,11 @@ namespace Invitation.Api.Controllers
         }
 
         [IgnoreAntiforgeryToken]
-        [HttpGet("getAntiForgeryTokens")]
-        public IActionResult GetAntiForgeryTokens()
+        [HttpGet("getAntiForgeryTokens/{accessToken}")]
+        public IActionResult GetAntiForgeryTokens(string accessToken)
         {
+            if (!CanAuthenticateWithMoreThanCSRFVulnerableCookie(accessToken)) return BadRequest();
+
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
 
             return Ok(tokens.RequestToken);
@@ -72,6 +76,11 @@ namespace Invitation.Api.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Ok();
+        }
+
+        private bool CanAuthenticateWithMoreThanCSRFVulnerableCookie(string accessToken)
+        {
+            return string.Equals(User.FindFirstValue("ExternalAccessToken"), accessToken, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

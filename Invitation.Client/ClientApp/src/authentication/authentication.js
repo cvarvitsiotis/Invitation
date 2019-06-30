@@ -67,7 +67,7 @@ class Authentication {
       const accessToken = googleUser.getAuthResponse().access_token;
       if (!accessToken) return ({ isSignedIn: false, error: 'Unable to obtain Google access token' });
       await this.signInInternally(accessToken);
-      await this.getAntiForgeryTokens();
+      await this.getAntiForgeryTokens(accessToken);
       return { isSignedIn: true, name, picture };
     } catch(error) {
       return { isSignedIn: false, error: error.message };
@@ -78,8 +78,8 @@ class Authentication {
     await axios.get(`${apiUrl}/api/auth/signIn/${encodeURIComponent(accessToken)}`, { withCredentials: true });
   };
 
-  getAntiForgeryTokens = async () => {
-    const result = await axios.get(`${apiUrl}/api/auth/getAntiForgeryTokens`, { withCredentials: true });
+  getAntiForgeryTokens = async accessToken => {
+    const result = await axios.get(`${apiUrl}/api/auth/getAntiForgeryTokens/${encodeURIComponent(accessToken)}`, { withCredentials: true });
     //Cookie name must match axios's xsrfCookieName
     document.cookie = `XSRF-TOKEN=${encodeURIComponent(result.data)}`;
   };
