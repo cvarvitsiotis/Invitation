@@ -29,7 +29,7 @@ This app lets you invite your friends to various events via text message, and it
 * Testing
   * Jest & Enzyme
 * Syntax
-  * ES6 transpiled via Babel
+  * ES9 transpiled via Babel
 * Build
   * Webpack
   * Separate app and vendor files
